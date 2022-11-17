@@ -33,9 +33,18 @@ namespace ft
             reverse_iterator( void ) {};
             ~reverse_iterator( void ) {};
 
-            reverse_iterator(reverse_iterator & src) {
+            explicit reverse_iterator(reverse_iterator & src) {
                _it = src._it;
             }
+
+            explicit reverse_iterator( iterator_type it ) {
+               _it = it;
+            }
+
+            template <class Iter>
+               reverse_iterator( const reverse_iterator<Iter>& rev_it) {
+                  _it = rev_it.base();
+               }
 
             iterator_type  base( void ) const {
                return _it;

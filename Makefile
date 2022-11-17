@@ -1,0 +1,35 @@
+vector		= ./vector_main.cpp
+
+RM			= rm -rf
+
+FLAGS		= -Wall -Wextra -Werror -g -std=c++98 #-fsanitize=address
+
+NAME		= ft
+
+STL_NAME	= std
+
+CC			= c++
+
+all:				$(NAME)
+
+$(NAME):			${CC} ${FLAGS} ${vector} -o ${NAME} -D FT
+					${CC} ${FLAGS} ${vector} -o ${STL_NAME} -D STL
+
+vector:
+					${CC} ${FLAGS} ${vector} -o ${NAME} -D FT
+					${CC} ${FLAGS} ${vector} -o ${STL_NAME} -D STL
+
+clean:
+					
+
+fclean:		clean
+					${RM} ${NAME}
+					${RM} ${STL_NAME}
+
+re:			fclean
+			make all
+					
+
+.SILENT:
+
+.PHONY: all clean fclean re bonus
