@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   vector_main.cpp                                    :+:      :+:    :+:   */
+/*   main_vec.cpp                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmarouf <cmarouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 18:26:47 by cmarouf           #+#    #+#             */
-/*   Updated: 2022/11/18 17:08:46 by anremiki         ###   ########.fr       */
+/*   Updated: 2022/11/17 14:48:05 by anremiki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,9 @@
 #include "vector.hpp"
 #include <vector>
 
+//NM::vector<int> tmp(10, 42);
+//NM::vector< NM::vector<int> > v2(10, tmp);
+
 void test_constructor( void )
 {
 	std::cout << RED << " TEST_CONSTRUCTOR " << WHITE << std::endl;
@@ -43,7 +46,9 @@ void test_constructor( void )
 
 	std::cout << YELLOW << " FILL CONSTRUCTOR " << WHITE << std::endl << std::endl;
 	NM::vector<int> tmp(10, 42);
-	NM::vector<NM::vector<int> > v2(10, tmp);
+	std::cout << YELLOW << " FILL CONSTRUCTOR " << WHITE << std::endl << std::endl;
+	NM::vector<int> v2(tmp);
+	std::cout << YELLOW << " FILL CONSTRUCTOR " << WHITE << std::endl << std::endl;
 	std::cout << "v2 size : " << v2.size() << " | v1 capacity : " << v2.capacity() << " | is v1 empty ? : " << v2.empty() << std::endl;
 
 	std::cout << YELLOW << " RANGE CONSTRUCTOR " << WHITE << std::endl << std::endl;
@@ -56,7 +61,7 @@ void test_constructor( void )
 	std::cout << std::endl;
 }
 
-void test_iterator( void )
+/*void test_iterator( void )
 {
 	std::cout << RED << " TEST_ITERATOR " << WHITE << std::endl << std::endl;
 	
@@ -402,13 +407,13 @@ void go_crasy( void )
 	
 	std::cout << "END TEST" << std::endl;
 }
-
+*/
 
 
 int main( void )
 {
-	//test_constructor();
-	test_iterator();
+	test_constructor();
+	//test_iterator();
 //	test_insert();
 //	test_erase();
 //	test_accesser();

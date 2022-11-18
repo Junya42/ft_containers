@@ -19,6 +19,9 @@ vector:
 					${CC} ${FLAGS} ${vector} -o ${NAME} -D FT
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME} -D STL
 
+test:				vector
+					./ft
+
 clean:
 					
 

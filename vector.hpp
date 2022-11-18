@@ -1,6 +1,7 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
+#include "is_integral.hpp"
 #include <functional>
 #if __x86_64__
 #define ARCH 64
@@ -8,9 +9,11 @@
 #define ARCH 32
 #endif 
 
+#include <iostream>
 #include <memory>
 #include <cmath>
 #include "reverse_iterator.hpp"
+#include "enable_if.hpp"
 #include "equal.hpp"
 #include "lexicographical_compare.hpp"
 
@@ -39,8 +42,7 @@ namespace ft
             /**********************/
 
             ~vector() {
-               while (_end != _start)
-                  _alloc.destroy(_end--);
+               clear();
                _alloc.deallocate(_start, capacity());
             }
 
@@ -57,18 +59,19 @@ namespace ft
             /* Constructs a container with n elements. Each element is a copy of val */
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
                : _start(NULL), _end(NULL), _capacity(NULL), _alloc(alloc) {
-                  _start = _alloc.allocate(n);
+                  assign(n, val);
+                  /*_start = _alloc.allocate(n);
                   _end = _start;
                   _capacity = _start + n;
                   while (_end != _capacity)
-                     _alloc.construct(_end++, val);
+                     _alloc.construct(_end++, val);*/
                }
 
             /* Range constructor */
             /* Construct a container with as many elements as the range [first, last],
              * with each element constructed from its corresponding element in that range, in the same order */
             template <class InputIterator>
-               vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type())
+               vector (InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last, const allocator_type& alloc = allocator_type())
                : _start(NULL), _end(NULL), _capacity(NULL), _alloc(alloc) {
                   assign(first, last);
                }
@@ -143,13 +146,26 @@ namespace ft
                if (!n)
                   reserve(1);
                if (n > capacity()) {
+                  //std::cout << "reserve" << std::endl;
                   pointer  start;
+                  pointer  end;
+                  pointer  ptr;
                   size_type   cap;
 
+                  //std::cout << "allocate" << std::endl;
                   start = _alloc.allocate(n);
-                  for (pointer end = start; end != _end; end++)
-                     _alloc.construct(end, *_end);
+                  end = start;
+                  ptr = _start;
+                  //std::cout << "before construct" << std::endl;
+                  while (n) {
+                     _alloc.construct(end, *ptr);
+                     ptr++;
+                     end++;
+                     n--;
+                  }
+                  //std::cout << "construct ok" << std::endl;
                   clear();
+                  //std::cout << "clear ok" << std::endl;
                   cap = capacity();
                   if (cap)
                      _alloc.deallocate(_start, cap);
@@ -230,17 +246,19 @@ namespace ft
             }
 
             template <class InputIterator>
-               void  assign(InputIterator first, InputIterator last) {
+               void  assign(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
                   if (capacity()) {
                      clear();
                      _alloc.deallocate(_start, capacity());
                   }
                   size_type n;
 
-                  n = last - first;
+                  n = last - first - 1;
                   _start = _alloc.allocate(n);
-                  for (_end = _start; _end < _start + n; _end++)
-                     _alloc.construct(_end, *(first++));
+                  for (_end = _start; _end < _start + n; _end++) {
+                     _alloc.construct(_end, *first);
+                     first++;
+                  }
                   _capacity = _end;
                }
 
@@ -279,16 +297,19 @@ namespace ft
                save = tmp;
                _end += n;
                ptr = _end - 1;
+               //std::cout << "first for" << std::endl;
                for (; tmp != position; tmp--) {
                   _alloc.construct(ptr--, *(tmp));
                   _alloc.destroy(tmp);
                }
+               //std::cout << "second for" << std::endl;
                for (; tmp != save; tmp++) 
                   _alloc.construct(tmp, val);
+               //std::cout << "end for" << std::endl;
             }
 
             template <class InputIterator>
-               void  insert(iterator position, InputIterator first, InputIterator last) {
+               void  insert(iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
                   size_type   n;
 
                   n = last - first;
@@ -316,9 +337,30 @@ namespace ft
                _alloc.destroy(save);
                while (save < _end) {
                   _alloc.construct(save, *(save + 1));
+                  if (save + 1 != _end)
+                     _alloc.destroy(save + 1);
                   save++;
                }
                return position;
+            }
+
+            iterator erase(iterator first, iterator last) {
+               iterator save;
+               iterator ptr;
+
+               save = first;
+               while (save < _end && save < last) {
+                  _alloc.destroy(save);
+                  save++;
+               }
+               ptr = first;
+               while (save < _end) {
+                  _alloc.construct(ptr, *save);
+                  _alloc.destroy(save);
+                  save++;
+                  ptr++;
+               }
+               return first;
             }
 
             void     swap(vector& x) {
@@ -340,8 +382,9 @@ namespace ft
             }
 
             void     clear(void) {
-               while (_end != _start)
-                  _alloc.destroy(_end--);
+               if (_start)
+                  while (_end >= _start)
+                     _alloc.destroy(--_end);
             }
 
             /***** Allocator *****/
