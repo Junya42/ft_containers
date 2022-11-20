@@ -260,9 +260,9 @@ namespace ft
                      clear();
                      _alloc.deallocate(_start, capacity());
                   }
-                  size_type n;
+                  difference_type n;
 
-                  n = last - first - 1;
+                  n = last - first;
                   _start = _alloc.allocate(n);
                   for (_end = _start; _end < _start + n; _end++) {
                      _alloc.construct(_end, *first);

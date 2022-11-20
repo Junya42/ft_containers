@@ -430,9 +430,9 @@ void go_crasy( void )
 int main( void )
 {
 	//test_constructor();
-//	test_iterator();
-//	test_insert();
-	test_erase();
+	//test_iterator();
+	test_insert();
+	//test_erase();
 	//	test_accesser();
 	//	go_crasy();
 	return 0;
