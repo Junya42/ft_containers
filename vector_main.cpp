@@ -63,7 +63,7 @@ void test_iterator( void )
 	NM::vector<int> v1(10, 42);
 	v1.insert(v1.begin() + 3, 4, 78);
 
-	std::cout << YELLOW << " ITERATOR " << WHITE << std::endl << std::endl;
+	/*std::cout << YELLOW << " ITERATOR " << WHITE << std::endl << std::endl;
 	{
 		NM::vector<int>::iterator it = v1.begin();
 		NM::vector<int>::iterator ite = v1.end();
@@ -101,7 +101,7 @@ void test_iterator( void )
 		std::cout << std::endl;
 		std::cout << std::endl;
 	}
-	std::cout << std::endl;
+	std::cout << std::endl;*/
 }
 
 void test_insert( void )
