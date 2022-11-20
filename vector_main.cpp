@@ -61,9 +61,20 @@ void test_iterator( void )
 	std::cout << RED << " TEST_ITERATOR " << WHITE << std::endl << std::endl;
 	
 	NM::vector<int> v1(10, 42);
+	{
+		NM::vector<int>::iterator it = v1.begin();
+		NM::vector<int>::iterator ite = v1.end();
+
+		for ( ; it != ite ; it++ )
+		{
+			std::cout << *it << " ";
+		}
+		std::cout << std::endl;
+		std::cout << std::endl;
+	}
 	v1.insert(v1.begin() + 3, 4, 78);
 
-	/*std::cout << YELLOW << " ITERATOR " << WHITE << std::endl << std::endl;
+	std::cout << YELLOW << " ITERATOR " << WHITE << std::endl << std::endl;
 	{
 		NM::vector<int>::iterator it = v1.begin();
 		NM::vector<int>::iterator ite = v1.end();
@@ -101,7 +112,7 @@ void test_iterator( void )
 		std::cout << std::endl;
 		std::cout << std::endl;
 	}
-	std::cout << std::endl;*/
+	std::cout << std::endl;
 }
 
 void test_insert( void )
@@ -117,9 +128,9 @@ void test_insert( void )
 		v1.insert(v1.begin(), "lorem ipsum");
 		v1.insert(v1.begin(), "Neque porro quisquam");
 		ret = v1.insert(v1.begin(), "Quisque eleifend");
-		
+
 		std::cout << " RETURN VALUE : " << *ret << std::endl << std::endl;
-	
+
 		NM::vector<std::string>::iterator it = v1.begin();
 		NM::vector<std::string>::iterator ite = v1.end();
 
@@ -131,11 +142,22 @@ void test_insert( void )
 		std::cout << std::endl;
 		std::cout << "v1 size : " << v1.size() << " | v1 capacity : " << v1.capacity() << " | is v1 empty ? : " << v1.empty() << std::endl;
 	}
-	std::cout << YELLOW << " INSERT SINGLE ELEMENT " << WHITE << std::endl << std::endl;
+	std::cout << YELLOW << " INSERT MULTIPLE ELEMENT " << WHITE << std::endl << std::endl;
 	{
 		std::cout << "v1 size : " << v1.size() << " | v1 capacity : " << v1.capacity() << " | is v1 empty ? : " << v1.empty() << std::endl << std::endl;
 		v1.insert(v1.begin(), 10, "lorem ipsum");
 		v1.insert(v1.begin(), 7, "Neque porro quisquam");
+		{
+			NM::vector<std::string>::iterator it = v1.begin();
+			NM::vector<std::string>::iterator ite = v1.end();
+
+			for ( ; it != ite ; it++ )
+			{
+				std::cout << *it << " ";
+			}
+			std::cout << std::endl;
+			std::cout << std::endl;
+		}
 		v1.insert(v1.begin(), 0, "Quisque eleifend");
 		NM::vector<std::string>::iterator it = v1.begin();
 		NM::vector<std::string>::iterator ite = v1.end();
@@ -176,7 +198,7 @@ void test_erase( void )
 	v1.insert(v1.begin(), "mdr");
 	v1.insert(v1.begin(), "xptdr");
 	v1.insert(v1.begin(), "ptdr");
-	
+
 	std::cout << YELLOW << " ERASE SINGLE ELEMENT " << WHITE << std::endl << std::endl;
 	{
 		std::cout << "v1 size : " << v1.size() << " | v1 capacity : " << v1.capacity() << " | is v1 empty ? : " << v1.empty() << std::endl << std::endl;
@@ -191,10 +213,10 @@ void test_erase( void )
 		}
 		std::cout << std::endl;
 		std::cout << std::endl;
-		
+
 		ret = v1.erase(v1.begin() + 2);
 		std::cout << " RETURN VALUE : " << *ret << std::endl << std::endl;
-			
+
 		std::cout << RED << "AFTER : " << WHITE;
 		NM::vector<std::string>::iterator it2 = v1.begin();
 		NM::vector<std::string>::iterator ite2 = v1.end();
@@ -207,7 +229,7 @@ void test_erase( void )
 		std::cout << std::endl;
 		std::cout << "v1 size : " << v1.size() << " | v1 capacity : " << v1.capacity()  << " | is v1 empty ? : " << v1.empty() << std::endl;
 	}
-	
+
 	std::cout << YELLOW << " ERASE RANGE " << WHITE << std::endl << std::endl;
 	{
 		std::cout << "v1 size : " << v1.size() << " | v1 capacity : " << v1.capacity()  << " | is v1 empty ? : " << v1.empty() << std::endl << std::endl;
@@ -222,7 +244,7 @@ void test_erase( void )
 		}
 		std::cout << std::endl;
 		std::cout << std::endl;
-		
+
 		ret = v1.erase(v1.begin(), v1.begin() + 2);
 		std::cout << " RETURN VALUE : " << *ret << std::endl << std::endl;
 
@@ -341,7 +363,7 @@ void go_crasy( void )
 		}
 		std::cout << std::endl;
 	}
-	
+
 	std::cout  << std::endl << YELLOW << " ERASING IN BEGIN AND INSERTING IN THE END " << WHITE << std::endl << std::endl;
 
 	v3.erase(v3.begin());
@@ -364,16 +386,16 @@ void go_crasy( void )
 	std::cout  << std::endl;
 	if ( v1 == v3 )
 		std::cout << " v1 == v3 " << std::endl;
-	
+
 	if ( v1 != v3 )
 		std::cout << " v1 != v3 " << std::endl;
 
 	if ( v1 > v3 )
 		std::cout << " v1 > v3 " << std::endl;
-	
+
 	if ( v1 >= v3 )
 		std::cout << " v1 >= v3 " << std::endl;
-	
+
 	if ( v1 < v3 )
 		std::cout << " v1 < v3 " << std::endl;
 
@@ -399,7 +421,7 @@ void go_crasy( void )
 	}
 	if ( v1.empty() )
 		std::cout << " V1 IS EMPTY " << std::endl;
-	
+
 	std::cout << "END TEST" << std::endl;
 }
 
@@ -408,10 +430,10 @@ void go_crasy( void )
 int main( void )
 {
 	//test_constructor();
-	test_iterator();
+//	test_iterator();
 //	test_insert();
-//	test_erase();
-//	test_accesser();
-//	go_crasy();
+	test_erase();
+	//	test_accesser();
+	//	go_crasy();
 	return 0;
 }

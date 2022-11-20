@@ -61,10 +61,10 @@ namespace ft
                : _start(NULL), _end(NULL), _capacity(NULL), _alloc(alloc) {
                   assign(n, val);
                   /*_start = _alloc.allocate(n);
-                  _end = _start;
-                  _capacity = _start + n;
-                  while (_end != _capacity)
-                     _alloc.construct(_end++, val);*/
+                    _end = _start;
+                    _capacity = _start + n;
+                    while (_end != _capacity)
+                    _alloc.construct(_end++, val);*/
                }
 
             /* Range constructor */
@@ -100,27 +100,27 @@ namespace ft
             }
 
             iterator end(void) {
-               return _end + 1;
+               return _end;
             }
 
             const_iterator end(void) const {
-               return _end + 1;
+               return _end;
             }
 
             reverse_iterator rbegin(void) {
-               return reverse_iterator(_end);
+               return reverse_iterator(_end - 1);
             }
 
             const_reverse_iterator rbegin(void) const {
-               return reverse_iterator(_end);
+               return reverse_iterator(_end - 1);
             }
 
             reverse_iterator rend(void) {
-               return reverse_iterator(_start);
+               return reverse_iterator(_start - 1);
             }
 
             const_reverse_iterator rend(void) const {
-               return reverse_iterator(_start);
+               return reverse_iterator(_start - 1);
             }
             /***** Capacity *****/
             /********************/
@@ -144,39 +144,41 @@ namespace ft
 
             void        reserve(size_type n) {
                if (!n) {
-                  std::cout << "NULL CAPACITY reserve 1" << std::endl;
                   reserve(1);
                }
                if (n > capacity()) {
-                  //std::cout << "reserve" << std::endl;
                   pointer  start;
                   pointer  end;
                   pointer  ptr;
                   size_type   cap;
 
-                  //std::cout << "allocate" << std::endl;
-                  std::cout << "allocating new size" << std::endl;
                   start = _alloc.allocate(n);
                   end = start;
                   ptr = _start;
-                  //std::cout << "before construct" << std::endl;
-                  while (ptr < _end) {
-                     std::cout << "constructing old reserved object with n : " << n << std::endl;
-                     _alloc.construct(end, *ptr);
-                     ptr++;
-                     end++;
+                  if (size()) {
+                  //   std::cout << "if size = " << size() << std::endl;
+                     while (ptr < _end) {
+                        _alloc.construct(end, *ptr);
+                        ptr++;
+                        end++;
+                     }
+                  //   std::cout << "before clear" << std::endl;
+                     clear();
+                  //   std::cout << "after clear" << std::endl;
+                     cap = capacity();
+                     if (cap)
+                        _alloc.deallocate(_start, cap);
+                     _start = start;
+                     _capacity = start + n;
+                     _end = end;
+                   //  std::cout << "after if reserve" << std::endl;
                   }
-                  //std::cout << "construct ok" << std::endl;
-                  std::cout << "clear" << std::endl;
-                  clear();
-                  std::cout << "clear ok" << std::endl;
-                  cap = capacity();
-                  if (cap)
-                     _alloc.deallocate(_start, cap);
-                  _start = start;
-                  _capacity = start + n;
-                  _end = end;
-                  std::cout << "reserve success" << std::endl;
+                  else {
+                   //  std::cout << "else" << std::endl;
+                     _start = start;
+                     _capacity = start + n;
+                     _end = start;
+                  }
                }
             }
 
@@ -241,10 +243,11 @@ namespace ft
                   }
                }
                else {
-                  for (pointer ptr = _start; ptr < _capacity; ptr++)
+                  for (pointer ptr = _start; ptr < _end; ptr++)
                      _alloc.destroy(ptr);
                   _alloc.deallocate(_start, capacity());
                   _start = _alloc.allocate(n);
+
                   for (_end = _start; _end < _start + n; _end++)
                      _alloc.construct(_end, val);
                   _capacity = _start + n;
@@ -279,97 +282,110 @@ namespace ft
             }
 
             iterator insert(iterator position, const value_type& val) {
-               if (size() + 1 > capacity())
-                  reserve(capacity() * 2);
-               pointer  tmp;
+               difference_type   pos = position - _start;
+             //  std::cout << "pos = " << pos << std::endl;
 
+               if (size() + 1 > capacity())
+                  reserve(size() * 2);
+               pointer  tmp;
+               pointer  new_end;
+               pointer  new_pos;
+
+               new_pos = _start + pos;
                tmp = _end - 1;
-               for (; tmp != position; tmp--) {
-                  _alloc.construct(_end, *(tmp));
+               new_end = _end;
+               while (tmp >= new_pos) {
+                 // std::cout << "IN INSERT WHILE" << std::endl;
+                  _alloc.construct(new_end, *(tmp));
                   _alloc.destroy(tmp);
+                  tmp--;
+                  new_end--;
                }
+               if (tmp < _start)
+                  tmp++;
                _alloc.construct(tmp, val);
-               return position;
+               _end++;
+               return new_pos;
             }
 
             void     insert(iterator position, size_type n, const value_type &val) {
-               std::cout << "reserve" << std::endl;
-               while (size() + n > capacity()) {
-                  std::cout << std::endl << "insert::reserve" << std::endl << "size() = " << size()
-                     << " n = " << n << " cap = " << capacity() << std::endl << std::endl;
-                  reserve(capacity() * 2);
-               }
-               /*pointer  tmp;
-               pointer  save;
-               pointer  ptr;
+               if (!n)
+                  return ;
+               difference_type   pos = position - _start;
 
-               tmp = _end - 1;
-               save = tmp;
-               _end += n;
-               ptr = _end - 1;
-               //std::cout << "first for" << std::endl;
-               for (; tmp != position; tmp--) {
-                  _alloc.construct(ptr--, *(tmp));
-                  _alloc.destroy(tmp);
-               }
-               //std::cout << "second for" << std::endl;
-               for (; tmp != save; tmp++) 
-                  _alloc.construct(tmp, val);
-               //std::cout << "end for" << std::endl;*/
+               if (!capacity())
+                  reserve(n);
+               else if (size() + n > capacity() * 2) 
+                  reserve(capacity() + n);
+               else if (size() + n > capacity())
+                  reserve(size() * 2);
+
                pointer  ptr;
                pointer  new_end;
-               difference_type good_pos;
+               pointer  test;
+             //  std::cout << "n = " << n << std::endl;
+             //  std::cout << "pos = " << pos << std::endl;
+              // std::cout << "ptr = " << _end - _start - 1 << std::endl;
 
+               test = _start + pos;
                ptr = _end - 1;
                new_end = ptr + n;
-               good_pos = position - _start;
-               position = _start + good_pos;
-
-               std::cout << "moving objects, n = " << n << " capacity = " << capacity() << " size = " << size() << std::endl;
-               while (ptr != position)
+               while (ptr >= test)
                {
-                  std::cout << "ptr - position = " <<  ptr - position << std::endl;
                   if (new_end < _end) {
-                     std::cout << "destroy" << std::endl;
                      _alloc.destroy(new_end);
                   }
-                  std::cout << "construct" << std::endl;
                   _alloc.construct(new_end, *ptr);
-                  std::cout << "after construct" << std::endl;
+                 // std::cout << "current = " << *ptr << std::endl;
                   ptr--;
                   new_end--;
                }
-               std::cout << "creating new objects" << std::endl;
+               ptr++;
+               new_end++;
                while (ptr < new_end)
                {
                   _alloc.destroy(ptr);
                   _alloc.construct(ptr, val);
+                 // std::cout << "ptr : " << ptr - _start << " | val : " << *ptr << std::endl;
                   ptr++;
                }
-               std::cout << "changing _end pointer" << std::endl;
                _end = _end + n;
             }
 
             template <class InputIterator>
                void  insert(iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
-                  size_type   n;
+                  difference_type   pos = position - _start;
+                  difference_type   itrange = last - first;
 
-                  n = last - first;
-                  while (size() + n > capacity())
+                  if (!itrange)
+                     return ;
+                  while (size() + itrange > capacity())
                      reserve(capacity() * 2);
 
-                  pointer  tmp;
+                  pointer  test;
                   pointer  ptr;
+                  pointer  new_end;
 
-                  tmp = _end - 1;
-                  _end += n;
+                  test = _start + pos;
                   ptr = _end - 1;
-                  for (; tmp != position; tmp--) {
-                     _alloc.construct(ptr--, *(tmp));
-                     _alloc.destroy(tmp);
+                  new_end = ptr + itrange;
+                  while (ptr >= test)
+                  {
+                     if (new_end < _end)
+                        _alloc.destroy(new_end);
+                     _alloc.construct(new_end, *ptr);
+                     ptr--;
+                     new_end--;
                   }
-                  while (first != last)
-                     _alloc.construct(tmp, *(first)++);
+                  ptr++;
+                  new_end++;
+                  while (ptr < new_end) {
+                     _alloc.destroy(ptr);
+                     _alloc.construct(ptr, *first);
+                     first++;
+                     ptr++;
+                  }
+                  _end = _end + itrange;
                }
 
             iterator erase(iterator position) {
@@ -425,8 +441,14 @@ namespace ft
 
             void     clear(void) {
                if (_start)
-                  while (_end >= _start)
-                     _alloc.destroy(--_end);
+               {
+                  --_end;
+                  while (_end >= _start) {
+                     _alloc.destroy(_end);
+                     _end--;
+                  }
+                  _end = _start;
+               }
             }
 
             /***** Allocator *****/
