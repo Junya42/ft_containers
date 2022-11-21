@@ -146,7 +146,7 @@ namespace ft
                   pointer  end;
                   pointer  ptr;
 
-                  start = _alloc.allocate(sizeof(size_type) * n);
+                  start = _alloc.allocate(sizeof(value_type) * n);
                   end = start;
                   ptr = _start;
                   if (size()) {
@@ -216,10 +216,10 @@ namespace ft
             }
 
             reference back(void) {
-               return *(_end);
+               return *(_end - 1);
             }
             const_reference back(void) const {
-               return *(_end);
+               return *(_end - 1);
             }
 
             /***** Modifiers *****/
@@ -236,7 +236,7 @@ namespace ft
                   for (pointer ptr = _start; ptr < _end; ptr++)
                      _alloc.destroy(ptr);
                   _alloc.deallocate(_start, capacity());
-                  _start = _alloc.allocate(sizeof(size_type) * n);
+                  _start = _alloc.allocate(sizeof(value_type) * n);
 
                   for (_end = _start; _end < _start + n; _end++)
                      _alloc.construct(_end, val);
@@ -253,7 +253,7 @@ namespace ft
                   difference_type n;
 
                   n = last - first;
-                  _start = _alloc.allocate(sizeof(difference_type) * n);
+                  _start = _alloc.allocate(sizeof(value_type) * n);
                   for (_end = _start; _end < _start + n; _end++) {
                      _alloc.construct(_end, *first);
                      first++;
@@ -264,7 +264,8 @@ namespace ft
             void     push_back(const value_type& val) {
                if (size() + 1 > capacity())
                   reserve(capacity() * 2);
-               _alloc.construct(++_end, val);
+               _alloc.construct(_end, val);
+               _end++;
             }
 
             void     pop_back(void) {
@@ -274,12 +275,8 @@ namespace ft
             iterator insert(iterator position, const value_type& val) {
                difference_type   pos = position - _start;
 
-               std::cout << "size + 1 : " << size() + 1 << std::endl;
-               std::cout << "capacity : " << capacity() << std::endl;
-               std::cout << "size * 2 : " << size() * 2 << std::endl;
                if (size() + 1 > capacity())
                   reserve(size() * 2);
-               std::cout << "new capacity : " << capacity() << std::endl;
                pointer  tmp;
                pointer  new_end;
                pointer  new_pos;
@@ -288,7 +285,6 @@ namespace ft
                tmp = _end - 1;
                new_end = _end;
                while (tmp >= new_pos) {
-                  std::cout << "construct" << std::endl;
                   _alloc.construct(new_end, *(tmp));
                   _alloc.destroy(tmp);
                   tmp--;
@@ -296,7 +292,6 @@ namespace ft
                }
                if (tmp < _start)
                   tmp++;
-               std::cout << "construct" << std::endl;
                _alloc.construct(tmp, val);
                _end++;
                return new_pos;
@@ -321,8 +316,10 @@ namespace ft
                test = _start + pos;
                ptr = _end - 1;
                new_end = ptr + n;
+               size_type   removed = 0;
                while (ptr >= test)
                {
+                  removed++;
                   if (new_end < _end) {
                      _alloc.destroy(new_end);
                   }
@@ -334,7 +331,7 @@ namespace ft
                new_end++;
                while (ptr < new_end)
                {
-                  if (ptr < test)
+                  if (ptr < test + removed)
                      _alloc.destroy(ptr);
                   _alloc.construct(ptr, val);
                   ptr++;
@@ -387,12 +384,12 @@ namespace ft
 
                save = position;
                _alloc.destroy(save);
-               while (save < _end) {
+               while (save + 1 < _end) {
                   _alloc.construct(save, *(save + 1));
-                  if (save + 1 != _end)
-                     _alloc.destroy(save + 1);
+                  _alloc.destroy(save + 1);
                   save++;
                }
+               _end--;
                return position;
             }
 
@@ -412,6 +409,7 @@ namespace ft
                   save++;
                   ptr++;
                }
+               _end = _end - (last - first);
                return first;
             }
 

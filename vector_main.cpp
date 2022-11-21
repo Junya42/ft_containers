@@ -6,7 +6,7 @@
 /*   By: cmarouf <cmarouf@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/06/24 18:26:47 by cmarouf           #+#    #+#             */
-/*   Updated: 2022/11/18 17:08:46 by anremiki         ###   ########.fr       */
+/*   Updated: 2022/11/21 16:16:18 by anremiki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,6 +129,9 @@ void test_insert( void )
 		v1.insert(v1.begin(), "Neque porro quisquam");
 		ret = v1.insert(v1.begin(), "Quisque eleifend");
 
+	//	v1.insert(v1.begin(), "Hello world");
+	//	v1.insert(v1.begin(), "Salut alloc probleme");
+	//	ret = v1.insert(v1.begin(), "Memoire construct");
 		std::cout << " RETURN VALUE : " << *ret << std::endl << std::endl;
 
 		NM::vector<std::string>::iterator it = v1.begin();
@@ -275,6 +278,7 @@ void	test_accesser( void )
 	v1.push_back(12);
 	v1.push_back(2);
 
+	std::cout << "SIZE = " << v1.size() << std::endl;
 	std::cout << YELLOW << " ACCESSING WITH [] " << WHITE << std::endl << std::endl;
 	std::cout << "[" << v1[1] << "]";
 	std::cout << "[" << v1[v1.size()] << "]";
@@ -429,11 +433,11 @@ void go_crasy( void )
 
 int main( void )
 {
-	//test_constructor();
-	//test_iterator();
+	test_constructor();
+	test_iterator();
 	test_insert();
-	//test_erase();
-	//	test_accesser();
-	//	go_crasy();
+	test_erase();
+	test_accesser();
+	go_crasy();
 	return 0;
 }

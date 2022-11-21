@@ -20,7 +20,7 @@ vector:
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME} -D STL
 
 test:				vector
-					./ft
+					valgrind ./ft
 
 clean:
 					
