@@ -60,11 +60,6 @@ namespace ft
             explicit vector (size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type())
                : _start(NULL), _end(NULL), _capacity(NULL), _alloc(alloc) {
                   assign(n, val);
-                  /*_start = _alloc.allocate(n);
-                    _end = _start;
-                    _capacity = _start + n;
-                    while (_end != _capacity)
-                    _alloc.construct(_end++, val);*/
                }
 
             /* Range constructor */
@@ -150,31 +145,26 @@ namespace ft
                   pointer  start;
                   pointer  end;
                   pointer  ptr;
-                  size_type   cap;
 
-                  start = _alloc.allocate(n);
+                  start = _alloc.allocate(sizeof(size_type) * n);
                   end = start;
                   ptr = _start;
                   if (size()) {
-                  //   std::cout << "if size = " << size() << std::endl;
                      while (ptr < _end) {
                         _alloc.construct(end, *ptr);
                         ptr++;
                         end++;
                      }
-                  //   std::cout << "before clear" << std::endl;
                      clear();
-                  //   std::cout << "after clear" << std::endl;
-                     cap = capacity();
-                     if (cap)
-                        _alloc.deallocate(_start, cap);
+                     if (capacity())
+                        _alloc.deallocate(_start, capacity());
                      _start = start;
                      _capacity = start + n;
                      _end = end;
-                   //  std::cout << "after if reserve" << std::endl;
                   }
                   else {
-                   //  std::cout << "else" << std::endl;
+                     if (capacity())
+                        _alloc.deallocate(_start, capacity());
                      _start = start;
                      _capacity = start + n;
                      _end = start;
@@ -246,7 +236,7 @@ namespace ft
                   for (pointer ptr = _start; ptr < _end; ptr++)
                      _alloc.destroy(ptr);
                   _alloc.deallocate(_start, capacity());
-                  _start = _alloc.allocate(n);
+                  _start = _alloc.allocate(sizeof(size_type) * n);
 
                   for (_end = _start; _end < _start + n; _end++)
                      _alloc.construct(_end, val);
@@ -263,7 +253,7 @@ namespace ft
                   difference_type n;
 
                   n = last - first;
-                  _start = _alloc.allocate(n);
+                  _start = _alloc.allocate(sizeof(difference_type) * n);
                   for (_end = _start; _end < _start + n; _end++) {
                      _alloc.construct(_end, *first);
                      first++;
@@ -283,10 +273,13 @@ namespace ft
 
             iterator insert(iterator position, const value_type& val) {
                difference_type   pos = position - _start;
-             //  std::cout << "pos = " << pos << std::endl;
 
+               std::cout << "size + 1 : " << size() + 1 << std::endl;
+               std::cout << "capacity : " << capacity() << std::endl;
+               std::cout << "size * 2 : " << size() * 2 << std::endl;
                if (size() + 1 > capacity())
                   reserve(size() * 2);
+               std::cout << "new capacity : " << capacity() << std::endl;
                pointer  tmp;
                pointer  new_end;
                pointer  new_pos;
@@ -295,7 +288,7 @@ namespace ft
                tmp = _end - 1;
                new_end = _end;
                while (tmp >= new_pos) {
-                 // std::cout << "IN INSERT WHILE" << std::endl;
+                  std::cout << "construct" << std::endl;
                   _alloc.construct(new_end, *(tmp));
                   _alloc.destroy(tmp);
                   tmp--;
@@ -303,6 +296,7 @@ namespace ft
                }
                if (tmp < _start)
                   tmp++;
+               std::cout << "construct" << std::endl;
                _alloc.construct(tmp, val);
                _end++;
                return new_pos;
@@ -313,7 +307,6 @@ namespace ft
                   return ;
                difference_type   pos = position - _start;
 
-               std::cout << "1" << std::endl;
                if (!capacity())
                   reserve(n);
                else if (size() + n > capacity() * 2) 
@@ -324,41 +317,28 @@ namespace ft
                pointer  ptr;
                pointer  new_end;
                pointer  test;
-             //  std::cout << "n = " << n << std::endl;
-             //  std::cout << "pos = " << pos << std::endl;
-              // std::cout << "ptr = " << _end - _start - 1 << std::endl;
 
                test = _start + pos;
                ptr = _end - 1;
                new_end = ptr + n;
-               std::cout << "2" << std::endl;
-               int i = 0;
                while (ptr >= test)
                {
                   if (new_end < _end) {
                      _alloc.destroy(new_end);
                   }
                   _alloc.construct(new_end, *ptr);
-                 // std::cout << "current = " << *ptr << std::endl;
                   ptr--;
                   new_end--;
                }
-               std::cout << "3" << std::endl;
                ptr++;
                new_end++;
-               std::cout << "4" << std::endl;
                while (ptr < new_end)
                {
-                  std::cout << i << " destroy" << std::endl;
-                  if (ptr)
+                  if (ptr < test)
                      _alloc.destroy(ptr);
-                  std::cout << ptr - _start << " construct" << std::endl;
                   _alloc.construct(ptr, val);
-                 // std::cout << "ptr : " << ptr - _start << " | val : " << *ptr << std::endl;
                   ptr++;
-                  i++;
                }
-               std::cout << "5" << std::endl;
                _end = _end + n;
             }
 
@@ -369,9 +349,12 @@ namespace ft
 
                   if (!itrange)
                      return ;
-                  while (size() + itrange > capacity())
-                     reserve(capacity() * 2);
-
+                  if (!capacity())
+                     reserve(itrange);
+                  else if (size() + itrange > capacity() * 2) 
+                     reserve(capacity() + itrange);
+                  else if (size() + itrange > capacity())
+                     reserve(size() * 2);
                   pointer  test;
                   pointer  ptr;
                   pointer  new_end;
@@ -390,7 +373,8 @@ namespace ft
                   ptr++;
                   new_end++;
                   while (ptr < new_end) {
-                     _alloc.destroy(ptr);
+                     if (ptr < test)
+                        _alloc.destroy(ptr);
                      _alloc.construct(ptr, *first);
                      first++;
                      ptr++;
@@ -450,7 +434,7 @@ namespace ft
             }
 
             void     clear(void) {
-               if (_start)
+               if (_start != NULL)
                {
                   --_end;
                   while (_end >= _start) {

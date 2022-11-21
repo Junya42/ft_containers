@@ -2,7 +2,7 @@ vector		= ./vector_main.cpp
 
 RM			= rm -rf
 
-FLAGS		= -Wall -Wextra -Werror -g -std=c++98 #-fsanitize=address
+FLAGS		= -Wall -Wextra -Werror -g3 -std=c++98 #-fsanitize=address
 
 NAME		= ft
 
