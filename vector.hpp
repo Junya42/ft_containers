@@ -313,6 +313,7 @@ namespace ft
                   return ;
                difference_type   pos = position - _start;
 
+               std::cout << "1" << std::endl;
                if (!capacity())
                   reserve(n);
                else if (size() + n > capacity() * 2) 
@@ -330,6 +331,8 @@ namespace ft
                test = _start + pos;
                ptr = _end - 1;
                new_end = ptr + n;
+               std::cout << "2" << std::endl;
+               int i = 0;
                while (ptr >= test)
                {
                   if (new_end < _end) {
@@ -340,15 +343,22 @@ namespace ft
                   ptr--;
                   new_end--;
                }
+               std::cout << "3" << std::endl;
                ptr++;
                new_end++;
+               std::cout << "4" << std::endl;
                while (ptr < new_end)
                {
-                  _alloc.destroy(ptr);
+                  std::cout << i << " destroy" << std::endl;
+                  if (ptr)
+                     _alloc.destroy(ptr);
+                  std::cout << ptr - _start << " construct" << std::endl;
                   _alloc.construct(ptr, val);
                  // std::cout << "ptr : " << ptr - _start << " | val : " << *ptr << std::endl;
                   ptr++;
+                  i++;
                }
+               std::cout << "5" << std::endl;
                _end = _end + n;
             }
 
