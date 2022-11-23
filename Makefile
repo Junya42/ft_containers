@@ -1,4 +1,5 @@
 vector		= ./vector_main.cpp
+stack		= ./stack_main.cpp
 
 RM			= rm -rf
 
@@ -18,6 +19,10 @@ $(NAME):			${CC} ${FLAGS} ${vector} -o ${NAME} -D FT
 vector:
 					${CC} ${FLAGS} ${vector} -o ${NAME} -D FT
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME} -D STL
+
+stack:
+					${CC} ${FLAGS} ${stack} -o ${NAME} -D FT
+					${CC} ${FLAGS} ${stack} -o ${STL_NAME} -D STL
 
 test:				vector
 					valgrind ./ft
