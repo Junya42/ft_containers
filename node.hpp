@@ -3,8 +3,8 @@
 
 #include <iostream>
 
-# define RED	true
-# define BLACK	false
+# define RED	false
+# define BLACK	true
 
 namespace ft {
 
