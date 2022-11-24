@@ -72,33 +72,45 @@ namespace ft {
 					*this = x;
 				}
 				map& operator=(const map& x) {
+					_root = x._root;
+					_cmp = x._cmp;
+					_alloc = x._alloc;
+					_size = x._size;
 					return *this;
 				}
 
 				/***** ITERATOR *****/
 
 				iterator	begin(void) {
+					return _root.begin();
 				}
 
 				const_iterator	begin(void) const {
+					return _root.const_begin();
 				}
 
 				iterator	end(void) {
+					return	_root.end();
 				}
 
 				const_iterator	end(void) const {
+					return _root.const_end();
 				}
 
 				reverse_iterator	rbegin(void) {
+					return reverse_iterator(_root.end());
 				}
 
 				const_reverse_iterator	rbegin(void) const {
+					return const_reverse_iterator(_root.const_end());
 				}
 
 				reverse_iterator	rend(void) {
+					return reverse_iterator(_root.begin());
 				}
 
 				const_reverse_iterator	rend(void) const {
+					return const_reverse_iterator(_root.const_begin());
 				}
 
 				/***** CAPACITY *****/
@@ -120,6 +132,7 @@ namespace ft {
 				/***** ELEMENT ACCESS *****/
 
 				mapped_type&	operator[](const key_type& k) {
+					return	(*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 				}
 
 				/***** MODIFIERS *****/

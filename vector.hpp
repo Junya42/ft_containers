@@ -125,8 +125,7 @@ namespace ft
             }
 
             size_type   max_size(void) const {
-               return ((size_type)(pow(2, ARCH)) / sizeof(T) - 1);
-               //return _alloc.max_size();
+               return _alloc.max_size();
             }
 
             size_type   capacity(void) const {

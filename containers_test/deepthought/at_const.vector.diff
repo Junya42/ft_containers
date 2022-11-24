@@ -1,0 +1,4 @@
+30c30
+< Catch out_of_range exception!
+---
+> 0
