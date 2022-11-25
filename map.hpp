@@ -61,11 +61,16 @@ namespace ft {
 				explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) {
 					_cmp = comp;
 					_alloc = alloc;
+					_size = 0;
 				}
 
 				template <class InputIterator>
 					map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-							const allocator_type& alloc = allocator_type()) {
+							const allocator_type& alloc = allocator_type()) : _size(0), _alloc(alloc), _cmp(comp) {
+						while (first != last) {
+							insert(*first);
+							first++;
+						}
 					}
 
 				map(const map& x){
@@ -138,13 +143,29 @@ namespace ft {
 				/***** MODIFIERS *****/
 
 				pair<iterator, bool>	insert(const value_type& val) {
+					ft::pair<iterator, bool>	tmp;
+
+					tmp = _root.insert(val);
+					if (tmp.second)
+						_size++;
+					return tmp;
 				}
 
 				iterator	insert(iterator position, const value_type& val) {
+					ft::pair<iterator, bool>	tmp;
+
+					tmp = _root.insert(val);
+					if (tmp.second)
+						_size++;
+					return tmp.first;
 				}
 
 				template <class InputIterator>
 					void	insert(InputIterator first, InputIterator last) {
+						while (first != last) {
+							insert(*first);
+							first++;
+						}
 					}
 
 				void	erase(iterator position) {

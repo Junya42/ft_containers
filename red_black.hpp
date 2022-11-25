@@ -79,9 +79,11 @@ namespace ft {
 				}
 
 				void	delete_node(Node_ptr z) {
-					Node_ptr y = z;
-					Node_ptr x;
+					Node_ptr x, y;
 					bool y_orignal_color = y->color;
+
+					y = z;
+					y_orignal_color = y->color;
 					if (!z->left) {
 						x = z->right;
 						_transplant(z, z->right);
