@@ -30,7 +30,7 @@ namespace ft {
 				typedef typename Node::const_Node_ref							const_Node_ref;
 				typedef typename allocator_type::template rebind<Node>::other	node_alloc;
 
-				Tree(void) : _root(NULL), _cmp(key_compare()), _alloc_node(node_alloc()), _alloc(allocator_type()) {
+				Tree(void) : _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key_compare()) {
 				}
 
 				Tree(const Tree& src) {
@@ -40,7 +40,7 @@ namespace ft {
 				Tree &operator=(const Tree& src) {
 					_root = src._root;
 					_alloc = src._alloc;
-					_alloc_node = src._node;
+					_alloc_node = src._alloc_node;
 					_cmp = src._cmp;
 					return *this;
 				}
@@ -64,6 +64,38 @@ namespace ft {
 					Node_ptr	x, y;
 
 					x = _root;
+					while (x) {
+						y = x;
+						if (_cmp(x->data.first, new_data.first))
+							x = x->right;
+						else if (!(_cmp(x->data.first, new_data.first)))
+							x = x->left;
+						else
+							return ft::make_pair<iterator, bool>(iterator(x, NULL), false);
+					}
+					x = _alloc_node.allocate(sizeof(Node_ptr));
+					_alloc_node.construct(x, Node(new_data));
+					x->parent = y;
+					if (_cmp(x->data.first, y->data.first))
+						y->left = x;
+					else
+						y->right = x;
+					_insert_rebalance(x);
+					return ft::make_pair<iterator, bool>(iterator(x, NULL), true);
+				}
+
+				ft::pair<iterator, bool>insert(iterator	position, const value_type& new_data) {
+					if (!position)
+						return ft::make_pair<iterator, bool>(iterator(_root, NULL), false);
+					if (!_root) {
+						_root = _alloc_node.allocate(sizeof(Node_ptr));
+						_alloc_node.construct(_root, Node(new_data));
+						_root->color = BLACK;
+						return ft::make_pair<iterator, bool>(iterator(_root, NULL), true);
+					}
+					Node_ptr	x, y;
+
+					x = position;
 					while (x) {
 						y = x;
 						if (_cmp(x->data.first, new_data.first))
@@ -459,7 +491,7 @@ namespace ft {
 					if (ptr->left)
 						_clear_nodes(ptr->left);
 					_alloc_node.destroy(ptr);
-					_alloc.node.deallocate(ptr, sizeof(Node_ptr));
+					_alloc_node.deallocate(ptr, sizeof(Node_ptr));
 					return ;
 				}
 		};

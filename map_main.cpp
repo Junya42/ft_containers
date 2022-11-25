@@ -53,7 +53,7 @@ void test_constructor( void )
 	std::cout << "Map3 size : " << Map3.size() << " | is Map3 empty ? : " << Map3.empty() << std::endl;
 	std::cout << std::endl;
 }
-
+/*
 void    test_iterator( void )
 {
     std::cout << REDD << " TEST_ITERATOR " << WHITE << std::endl << std::endl;
@@ -466,7 +466,7 @@ void    	go_crasy( void )
     std::cout << "Searching for the non existable Counter [" << Map3.count("Keqweqweqweey1")  << "]" << std::endl;
 
     std::cout << "END TEST " << std::endl;
-}
+}*/
 
 int main( void )
 {

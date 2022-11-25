@@ -59,10 +59,8 @@ namespace ft {
 						}
 				};
 
-				explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) {
-					_cmp = comp;
-					_alloc = alloc;
-					_size = 0;
+				explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _cmp(comp),
+				_alloc(alloc), _size(0){
 				}
 
 				template <class InputIterator>
@@ -77,6 +75,7 @@ namespace ft {
 				map(const map& x){
 					*this = x;
 				}
+
 				map& operator=(const map& x) {
 					_root = x._root;
 					_cmp = x._cmp;
@@ -159,7 +158,9 @@ namespace ft {
 				iterator	insert(iterator position, const value_type& val) {
 					ft::pair<iterator, bool>	tmp;
 
-					tmp = _root.insert(val);
+					tmp = _root.insert(position, val);
+					if (!tmp.second)
+						return insert(val).first;
 					if (tmp.second)
 						_size++;
 					return tmp.first;
