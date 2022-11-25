@@ -46,6 +46,12 @@ namespace ft {
 				}
 				
 				~Tree(void) {
+					clear();
+				}
+
+				void	clear(void) {
+					_clear_nodes(_root);
+					_root = NULL;
 				}
 
 				ft::pair<iterator, bool>insert(const value_type& new_data) {
@@ -78,12 +84,28 @@ namespace ft {
 					return ft::make_pair<iterator, bool>(iterator(x, NULL), true);
 				}
 
-				void	delete_node(Node_ptr z) {
+				ft::pair<iterator, bool>	get_delete_node_ptr(const key_type &key) {
+					Node_ptr	ptr = _root;
+
+					while (ptr && ptr->data.first != key) {
+						if (_cmp(ptr->data.first, key))
+							ptr = ptr->right;
+						else if (!(_cmp(ptr->data.first, key)))
+							ptr = ptr->left;
+						else
+							break ;
+					}
+					if (!ptr)
+						return ft::make_pair<iterator, bool>(iterator(NULL, NULL), false);
+					return delete_node(ptr);
+				}
+
+				ft::pair<iterator, bool>	delete_node(Node_ptr z) {
 					Node_ptr x, y;
-					bool y_orignal_color = y->color;
+					bool orignal_color;
 
 					y = z;
-					y_orignal_color = y->color;
+					orignal_color = y->color;
 					if (!z->left) {
 						x = z->right;
 						_transplant(z, z->right);
@@ -94,7 +116,7 @@ namespace ft {
 					}
 					else {
 						y = _minimum(z->right);
-						y_orignal_color = y->color;
+						orignal_color = y->color;
 						x = y->right;
 						if(y->parent == z) {
 							x->parent = z;
@@ -109,9 +131,142 @@ namespace ft {
 						y->left->parent = y;
 						y->color = z->color;
 					}
-					if (y_orignal_color == BLACK)
+					_alloc_node.destroy(z);
+					_alloc_node.deallocate(z, sizeof(Node_ptr));
+					if (orignal_color == BLACK)
 						_delete_fix(x);
+					return ft::make_pair<iterator, bool>(iterator(x, NULL), true);
 				}
+
+				iterator	find(const key_type& k) {
+					Node_ptr ptr;
+
+					ptr = _root;
+					while (ptr) {
+						if (_cmp(ptr->data.first, k))
+							ptr = ptr->right;
+						else if (_cmp(k, ptr->data.first))
+							ptr = ptr->left;
+						else
+							return iterator(ptr, NULL);
+					}
+					return iterator(ptr, NULL);
+				}
+
+				const_iterator	find(const key_type& k) const {
+					Node_ptr ptr;
+
+					ptr = _root;
+					while (ptr) {
+						if (_cmp(ptr->data.first, k))
+							ptr = ptr->right;
+						else if (_cmp(k, ptr->data.first))
+							ptr = ptr->left;
+						else
+							return const_iterator(ptr, NULL);
+					}
+					return const_iterator(ptr, NULL);
+				}
+
+				size_type	count(const key_type& k) {
+					Node_ptr ptr;
+
+					ptr = _root;
+					while (ptr) {
+						if (_cmp(ptr->data.first, k))
+							ptr = ptr->right;
+						else if (_cmp(k, ptr->data.first))
+							ptr = ptr->left;
+						else
+							return 1;
+					}
+					return 0;
+				}
+
+				iterator	begin(void) {
+					return iterator(_minimum(_root), NULL);
+				}
+
+				const_iterator	const_begin(void) const {
+					return const_iterator(_minimum(_root), NULL);
+				}
+
+				iterator	end(void) {
+					return iterator(NULL, _maximum(_root));
+				}
+
+				const_iterator	const_end(void) const {
+					return const_iterator(NULL, _maximum(_root));
+				}
+
+				iterator	lower_bound(const key_type& k) {
+					iterator	it, ite;
+
+					it = begin();
+					ite = end();
+					while (it != ite) {
+						if (!(_cmp(it->first, k)))
+							return it;
+						it++;
+					}
+					return	it;
+				}
+
+				const_iterator	lower_bound(const key_type& k) const {
+					const_iterator	it, ite;
+
+					it = const_begin();
+					ite = const_end();
+					while (it != ite) {
+						if (!(_cmp(it->first, k)))
+							return it;
+						it++;
+					}
+					return it;
+				}
+
+				iterator	upper_bound(const key_type& k) {
+					iterator	it, ite;
+
+					it = begin();
+					ite = end();
+					while (it != ite) {
+						if (_cmp(k, it->first))
+							return it;
+						it++;
+					}
+					return	it;
+				}
+
+				const_iterator	upper_bound(const key_type& k) const {
+					const_iterator	it, ite;
+
+					it = const_begin();
+					ite = const_end();
+					while (it != ite) {
+						if (_cmp(k, it->first))
+							return it;
+						it++;
+					}
+					return	it;
+				}
+
+				void	swap(Tree& src) {
+					Node_ptr	tmp;
+
+					tmp = _root;
+					_root = src._root;
+					src._root = tmp;
+
+					tmp = _cmp;
+					_cmp = src._cmp;
+					src._cmp = tmp;
+
+					tmp = _alloc_node;
+					_alloc_node = src._alloc_node;
+					src._alloc_node = tmp;
+				}
+
 
 			private:
 
@@ -294,6 +449,18 @@ namespace ft {
 						}
 					}
 					x->color = BLACK;
+				}
+
+				void	_clear_nodes(Node_ptr ptr) {
+					if (!ptr)
+						return ;	
+					if (ptr->right)
+						_clear_nodes(ptr->right);
+					if (ptr->left)
+						_clear_nodes(ptr->left);
+					_alloc_node.destroy(ptr);
+					_alloc.node.deallocate(ptr, sizeof(Node_ptr));
+					return ;
 				}
 		};
 }

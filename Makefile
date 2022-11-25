@@ -1,5 +1,6 @@
 vector		= ./vector_main.cpp
 stack		= ./stack_main.cpp
+map			= ./map_main.cpp
 
 RM			= rm -rf
 
@@ -23,6 +24,10 @@ vector:
 stack:
 					${CC} ${FLAGS} ${stack} -o ${NAME} -D FT
 					${CC} ${FLAGS} ${stack} -o ${STL_NAME} -D STL
+
+map:
+					${CC} ${FLAGS} ${map} -o ${NAME} -D FT
+					${CC} ${FLAGS} ${map} -o ${STL_NAME} -D STL
 
 test:				vector
 					valgrind ./ft
