@@ -14,6 +14,7 @@
 # define RED_BLACK_ITERATOR_HPP
 
 #include "bidirectional_iterator.hpp"
+#include "iterator.hpp"
 #include "iterator_traits.hpp"
 
 namespace ft {
@@ -32,9 +33,13 @@ namespace ft {
 				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
 
 				Tree_iterator(void) {
-					_node(NULL);
-					_end(NULL);
+					_node = NULL;
+					_end = NULL;
 				}
+
+				Tree_iterator(iterator_type node, iterator_type end)
+					: _node(node), _end(end) {
+					}
 
 				Tree_iterator(const Tree_iterator& src) {
 					*this = src;
@@ -143,7 +148,7 @@ namespace ft {
 
 			public:
 
-				typedef				const Iterator*							const iterator_type;
+				typedef				const Iterator*							iterator_type;
 				typedef typename	Iterator::value_type					const value_type;
 
 				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::iterator_category	iterator_category;
@@ -185,39 +190,6 @@ namespace ft {
 					return _end;
 				}
 
-				void	increment(void) {
-					if (_node) {
-						_end = _node;
-						if (_node->right) {
-							_node = _node->right;
-							while (_node->left)
-								_node = _node->left;
-						}
-						else {
-							while (_node->parent && _node->parent->right == _node)
-								_node = _node->parent;
-							_node = _node->parent;
-						}
-					}
-				}
-
-				void	decrement(void) {
-					if (_node) {
-						if (_node->left) {
-							_node = _node->left;
-							while (_node->right)
-								_node = _node->right;
-						}
-						else {
-							while (_node->parent && _node->parent->left == _node)
-								_node = _node->parent;
-							_node = _node->parent;
-						}
-					}
-					else
-						_node = _end;
-				}
-
 				const_Tree_iterator&	operator++(void) {
 					increment();
 					return *this;
@@ -254,9 +226,41 @@ namespace ft {
 
 			private:
 
-				iterator_type	_node;
-				iterator_type	_end;
+				const iterator_type	_node;
+				const iterator_type	_end;
 
+				void	increment(void) {
+					if (_node) {
+						_end = _node;
+						if (_node->right) {
+							_node = _node->right;
+							while (_node->left)
+								_node = _node->left;
+						}
+						else {
+							while (_node->parent && _node->parent->right == _node)
+								_node = _node->parent;
+							_node = _node->parent;
+						}
+					}
+				}
+
+				void	decrement(void) {
+					if (_node) {
+						if (_node->left) {
+							_node = _node->left;
+							while (_node->right)
+								_node = _node->right;
+						}
+						else {
+							while (_node->parent && _node->parent->left == _node)
+								_node = _node->parent;
+							_node = _node->parent;
+						}
+					}
+					else
+						_node = _end;
+				}
 		};
 }
 

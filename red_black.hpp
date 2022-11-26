@@ -33,6 +33,9 @@ namespace ft {
 				Tree(void) : _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key_compare()) {
 				}
 
+				explicit Tree(const key_compare& key)
+					: _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key){
+			}
 				Tree(const Tree& src) {
 					*this = src;
 				}
@@ -331,7 +334,7 @@ namespace ft {
 					y = x->left;
 					x->left = y->right;
 					if (y->right)
-						y->right.parent = x;
+						y->right->parent = x;
 					y->parent = x->parent;
 					if (!y->parent)
 						_root = y;
@@ -359,7 +362,7 @@ namespace ft {
 				void	_insert_rebalance(Node_ptr &x) {
 					Node_ptr	y;
 
-					while (x->parent && x->parent.color == RED) {
+					while (x->parent && x->parent->color == RED) {
 						y = _uncle(x);
 						if (x->parent == _grandpa(x)->left) {
 							if (y && y->color == RED) {
@@ -374,8 +377,11 @@ namespace ft {
 									_left_rotate(x);
 								}
 								x->parent->color = BLACK;
-								_grandpa(x)->color = RED;
-								_right_rotate(_grandpa(x));
+								y = _grandpa(x);
+								y->color = RED;
+								_right_rotate(y);
+								//_grandpa(x)->color = RED;
+								//_right_rotate(_grandpa(x));
 							}
 						}
 						else {
@@ -391,8 +397,11 @@ namespace ft {
 									_right_rotate(x);
 								}
 								x->parent->color = BLACK;
-								_grandpa(x)->color = RED;
-								_left_rotate(_grandpa(x));
+								y = _grandpa(x);
+								y->color = RED;
+								_left_rotate(y);
+								//_grandpa(x)->color = RED;
+								//_left_rotate(_grandpa(x));
 							}
 						}
 					}

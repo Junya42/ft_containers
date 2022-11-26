@@ -23,11 +23,12 @@ namespace ft {
 			
 			public:
 
-				typedef ft::pair<const Key, T>		value_type;
-				typedef	Key							key_type;
-				typedef	T							mapped_type;
-				typedef	Compare						key_compare;
-				typedef Alloc																		allocator_type;
+				typedef	Key											key_type;
+				typedef	T											mapped_type;
+				typedef	Compare										key_compare;
+				typedef Alloc										allocator_type;
+				typedef ft::pair<const key_type, mapped_type>		value_type;
+
 				typedef typename    allocator_type::difference_type 								difference_type;
 				typedef typename    allocator_type::size_type 										size_type;
 				typedef typename    allocator_type::reference 										reference;
@@ -59,13 +60,13 @@ namespace ft {
 						}
 				};
 
-				explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()) : _cmp(comp),
-				_alloc(alloc), _size(0){
+				explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+					: _cmp(comp), _alloc(alloc), _size(0) {
 				}
 
 				template <class InputIterator>
-					map(InputIterator first, InputIterator last, const key_compare& comp = key_compare(),
-							const allocator_type& alloc = allocator_type()) : _size(0), _alloc(alloc), _cmp(comp) {
+					map(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last, const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type())
+					: _cmp(comp), _alloc(alloc), _size(0) {
 						while (first != last) {
 							insert(*first);
 							first++;
@@ -167,7 +168,7 @@ namespace ft {
 				}
 
 				template <class InputIterator>
-					void	insert(InputIterator first, InputIterator last) {
+					void	insert(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
 						ft::pair<iterator, bool>	tmp;
 						while (first != last) {
 							tmp = insert(*first);
