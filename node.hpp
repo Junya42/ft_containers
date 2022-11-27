@@ -30,26 +30,22 @@ namespace ft {
 			~Node(){
 			};
 
-			Node(value_type ndata, Node_ptr nparent = NULL, Node_ptr nleft = NULL, Node_ptr nright = NULL) : color(RED) {
-				data = ndata;
-				parent = nparent;
-				left = nleft;
-				right = nright;
+			Node(value_type ndata, Node_ptr nparent = NULL, Node_ptr nleft = NULL, Node_ptr nright = NULL)
+				: parent(nparent), left(nleft), right(nright), color(RED), data(ndata) {
 			}
 
-			Node(const Node& src) {
-				*this = src;
+			Node(const Node& src) 
+				: parent(src.parent), left(src.left), right(src.right), color(src.color), data(src.data) {
 			}
 
 			Node& operator=(const Node& src) {
-				data = src.data;
 				parent = src.parent;
 				left = src.left;
 				right = src.right;
+				data = src.data;
 				color = src.color;
 				return *this;
 			}
-
 		};
 }
 

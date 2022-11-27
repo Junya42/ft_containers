@@ -48,12 +48,12 @@ void test_constructor( void )
 	std::cout << "Map2 size : " << Map2.size() <<  " | is Map2 empty ? : " << Map2.empty() << std::endl;
     std::cout << std::endl;
 
-	/*std::cout << YELLOW << " COPY CONSTRUCTOR " << WHITE << std::endl << std::endl;
+	std::cout << YELLOW << " COPY CONSTRUCTOR " << WHITE << std::endl << std::endl;
 	NM::map<std::string, int> Map3(Map2);
 	std::cout << "Map3 size : " << Map3.size() << " | is Map3 empty ? : " << Map3.empty() << std::endl;
-	std::cout << std::endl;*/
+	std::cout << std::endl;
 }
-/*
+
 void    test_iterator( void )
 {
     std::cout << REDD << " TEST_ITERATOR " << WHITE << std::endl << std::endl;
@@ -171,7 +171,7 @@ void    test_insert( void )
     std::cout << std::endl;
 	std::cout << std::endl;
 }
-
+/*
 void    test_erase( void )
 {   
     std::cout << REDD << " TEST_ERASE " << WHITE << std::endl << std::endl;
@@ -470,9 +470,9 @@ void    	go_crasy( void )
 
 int main( void )
 {
-    test_constructor();
+    //test_constructor();
 	//test_iterator();
-	//test_insert();
+	test_insert();
 	//test_erase();
     //test_operator();
 	//go_crasy();

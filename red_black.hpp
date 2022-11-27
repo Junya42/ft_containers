@@ -30,12 +30,14 @@ namespace ft {
 				typedef typename Node::const_Node_ref							const_Node_ref;
 				typedef typename allocator_type::template rebind<Node>::other	node_alloc;
 
-				Tree(void) : _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key_compare()) {
+				Tree(void)
+					: _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key_compare()) {
 				}
 
 				explicit Tree(const key_compare& key)
-					: _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key){
-			}
+					: _root(NULL), _alloc(allocator_type()), _alloc_node(node_alloc()), _cmp(key) {
+				}
+
 				Tree(const Tree& src) {
 					*this = src;
 				}
@@ -53,8 +55,7 @@ namespace ft {
 				}
 
 				void	clear(void) {
-					_clear_nodes(_root);
-					_root = NULL;
+					_root = _clear_nodes(_root);
 				}
 
 				ft::pair<iterator, bool>insert(const value_type& new_data) {
@@ -69,10 +70,12 @@ namespace ft {
 					x = _root;
 					while (x) {
 						y = x;
-						if (_cmp(x->data.first, new_data.first))
+						if (_cmp(x->data.first, new_data.first)) {
 							x = x->right;
-						else if (!(_cmp(x->data.first, new_data.first)))
+						}
+						else if (_cmp(new_data.first, x->data.first)) {
 							x = x->left;
+						}
 						else
 							return ft::make_pair<iterator, bool>(iterator(x, NULL), false);
 					}
@@ -103,7 +106,7 @@ namespace ft {
 						y = x;
 						if (_cmp(x->data.first, new_data.first))
 							x = x->right;
-						else if (!(_cmp(x->data.first, new_data.first)))
+						else if (_cmp(new_data.first, x->data.first))
 							x = x->left;
 						else
 							return ft::make_pair<iterator, bool>(iterator(x, NULL), false);
@@ -125,7 +128,7 @@ namespace ft {
 					while (ptr && ptr->data.first != key) {
 						if (_cmp(ptr->data.first, key))
 							ptr = ptr->right;
-						else if (!(_cmp(ptr->data.first, key)))
+						else if (_cmp(key, ptr->data.first))
 							ptr = ptr->left;
 						else
 							break ;
@@ -310,7 +313,7 @@ namespace ft {
 				node_alloc		_alloc_node;
 				key_compare		_cmp;
 
-				void	_left_rotate(Node_ptr &x) {
+				void	_left_rotate(Node_ptr x) {
 					Node_ptr	y;
 
 					y = x->right;
@@ -328,7 +331,7 @@ namespace ft {
 					x->parent = y;
 				}
 
-				void	_right_rotate(Node_ptr &x) {
+				void	_right_rotate(Node_ptr x) {
 					Node_ptr	y;
 
 					y = x->left;
@@ -359,7 +362,7 @@ namespace ft {
 					return (tmp->left);
 				}
 
-				void	_insert_rebalance(Node_ptr &x) {
+				void	_insert_rebalance(Node_ptr x) {
 					Node_ptr	y;
 
 					while (x->parent && x->parent->color == RED) {
@@ -420,17 +423,19 @@ namespace ft {
 					v->parent = u->parent;
 				}
 
-				Node_ptr	_minimum(Node_ptr x) {
-					while (x->left) {
-						x = x->left;
-					}
+				Node_ptr	_minimum(Node_ptr x) const {
+					if (!x)
+						return NULL;
+					if (x->left)
+						return	_minimum(x->left);
 					return x;
 				}
 
-				Node_ptr	_maximum(Node_ptr x) {
-					while (x->right) {
-						x = x->right;
-					}
+				Node_ptr	_maximum(Node_ptr x) const {
+					if (!x)
+						return NULL;
+					if (x->right)
+						return _maximum(x->right);
 					return x;
 				}
 
@@ -492,16 +497,17 @@ namespace ft {
 					x->color = BLACK;
 				}
 
-				void	_clear_nodes(Node_ptr ptr) {
+				Node_ptr	_clear_nodes(Node_ptr ptr) {
 					if (!ptr)
-						return ;	
+						return NULL;	
 					if (ptr->right)
 						_clear_nodes(ptr->right);
 					if (ptr->left)
 						_clear_nodes(ptr->left);
 					_alloc_node.destroy(ptr);
-					_alloc_node.deallocate(ptr, sizeof(Node_ptr));
-					return ;
+					_alloc_node.deallocate(ptr, 1);
+					ptr = NULL;
+					return NULL;
 				}
 		};
 }

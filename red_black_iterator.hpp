@@ -16,11 +16,15 @@
 #include "bidirectional_iterator.hpp"
 #include "iterator.hpp"
 #include "iterator_traits.hpp"
+#include <iostream>
 
 namespace ft {
 
 	template <class Iterator>
-		class Tree_iterator {
+		class const_Tree_iterator;
+
+	template <class Iterator>
+		class Tree_iterator : public const_Tree_iterator<Iterator> {
 			
 			public:
 
@@ -38,11 +42,10 @@ namespace ft {
 				}
 
 				Tree_iterator(iterator_type node, iterator_type end)
-					: _node(node), _end(end) {
+					: const_Tree_iterator<Iterator>(node, end), _node(node), _end(end) {
 					}
 
-				Tree_iterator(const Tree_iterator& src) {
-					*this = src;
+				Tree_iterator(const Tree_iterator& src) : const_Tree_iterator<Iterator>(src), _node(src._node), _end(src._end) {
 				}
 
 				Tree_iterator&	operator=(const Tree_iterator& src) {
@@ -70,41 +73,9 @@ namespace ft {
 					return _end;
 				}
 
-				void	increment(void) {
-					if (_node) {
-						_end = _node;
-						if (_node->right) {
-							_node = _node->right;
-							while (_node->left)
-								_node = _node->left;
-						}
-						else {
-							while (_node->parent && _node->parent->right == _node)
-								_node = _node->parent;
-							_node = _node->parent;
-						}
-					}
-				}
-
-				void	decrement(void) {
-					if (_node) {
-						if (_node->left) {
-							_node = _node->left;
-							while (_node->right)
-								_node = _node->right;
-						}
-						else {
-							while (_node->parent && _node->parent->left == _node)
-								_node = _node->parent;
-							_node = _node->parent;
-						}
-					}
-					else
-						_node = _end;
-				}
 
 				Tree_iterator&	operator++(void) {
-					increment();
+					_increment();
 					return *this;
 				}
 
@@ -112,12 +83,12 @@ namespace ft {
 					Tree_iterator	tmp;
 
 					tmp = *this;
-					increment();
+					_increment();
 					return	tmp;
 				}
 
 				Tree_iterator&	operator--(void) {
-					decrement();
+					_decrement();
 					return *this;
 				}
 
@@ -125,7 +96,7 @@ namespace ft {
 					Tree_iterator	tmp;
 
 					tmp = *this;
-					decrement();
+					_decrement();
 					return tmp;
 				}
 
@@ -141,6 +112,41 @@ namespace ft {
 
 				iterator_type	_node;
 				iterator_type	_end;
+
+				void	_increment(void) {
+					if (_node) {
+						_end = _node;
+						if (_node->right) {
+							_node = _node->right;
+							while (_node->left) {
+								_node = _node->left;
+							}
+						}
+						else {
+							while (_node->parent && _node->parent->right == _node) {
+								_node = _node->parent;
+							}
+							_node = _node->parent;
+						}
+					}
+				}
+
+				void	_decrement(void) {
+					if (_node) {
+						if (_node->left) {
+							_node = _node->left;
+							while (_node->right)
+								_node = _node->right;
+						}
+						else {
+							while (_node->parent && _node->parent->left == _node)
+								_node = _node->parent;
+							_node = _node->parent;
+						}
+					}
+					else
+						_node = _end;
+				}
 		};
 
 	template <class Iterator>
@@ -156,14 +162,17 @@ namespace ft {
 				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::pointer			pointer;
 				typedef typename	ft::iterator<ft::bidirectional_iterator_tag, value_type>::reference			reference;
 
-				const_Tree_iterator(void) {
-					_node(NULL);
-					_end(NULL);
-				}
+				const_Tree_iterator(void)
+					: _node(NULL), _end(NULL) {
+					}
 
-				const_Tree_iterator(const const_Tree_iterator& src) {
-					*this = src;
-				}
+				const_Tree_iterator(iterator_type node, iterator_type end)
+					: _node(node), _end(end) {
+					}
+
+				const_Tree_iterator(const const_Tree_iterator& src)
+					: _node(src._node), _end(src._end) {
+					}
 
 				const_Tree_iterator&	operator=(const const_Tree_iterator& src) {
 					_node = src._node;
@@ -191,7 +200,7 @@ namespace ft {
 				}
 
 				const_Tree_iterator&	operator++(void) {
-					increment();
+					_increment();
 					return *this;
 				}
 
@@ -199,12 +208,12 @@ namespace ft {
 					const_Tree_iterator	tmp;
 
 					tmp = *this;
-					increment();
+					_increment();
 					return	tmp;
 				}
 
 				const_Tree_iterator&	operator--(void) {
-					decrement();
+					_decrement();
 					return *this;
 				}
 
@@ -212,7 +221,7 @@ namespace ft {
 					const_Tree_iterator	tmp;
 
 					tmp = *this;
-					decrement();
+					_decrement();
 					return tmp;
 				}
 
@@ -226,10 +235,10 @@ namespace ft {
 
 			private:
 
-				const iterator_type	_node;
-				const iterator_type	_end;
+				iterator_type	_node;
+				iterator_type	_end;
 
-				void	increment(void) {
+				void	_increment(void) {
 					if (_node) {
 						_end = _node;
 						if (_node->right) {
@@ -245,7 +254,7 @@ namespace ft {
 					}
 				}
 
-				void	decrement(void) {
+				void	_decrement(void) {
 					if (_node) {
 						if (_node->left) {
 							_node = _node->left;

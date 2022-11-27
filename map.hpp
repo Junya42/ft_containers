@@ -73,20 +73,24 @@ namespace ft {
 						}
 					}
 
-				map(const map& x){
+				map(const map& x) : _size(0) {
 					*this = x;
 				}
 
 				map& operator=(const map& x) {
-					_root = x._root;
-					_cmp = x._cmp;
-					_alloc = x._alloc;
-					_size = x._size;
+					if (*this != x) {
+						if (_size)
+							clear();
+						_cmp = x._cmp;
+						_alloc = x._alloc;
+						insert(x.begin(), x.end());
+						_size = x._size;
+					}
 					return *this;
 				}
 
 				~map(void) {
-					clear();
+					//clear();
 				}
 
 				/***** ITERATOR *****/
@@ -127,8 +131,8 @@ namespace ft {
 
 				bool	empty(void) const {
 					if (_size)
-						return true;
-					return false;
+						return false;
+					return true;
 				}
 
 				size_type	size(void) const {
@@ -169,12 +173,13 @@ namespace ft {
 
 				template <class InputIterator>
 					void	insert(InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
-						ft::pair<iterator, bool>	tmp;
+						//ft::pair<iterator, bool>	tmp;
 						while (first != last) {
-							tmp = insert(*first);
+							//tmp = insert(*first);
+							insert(*first);
 							first++;
-							if (tmp.second)
-								_size++;
+							//if (tmp.second)
+							//	_size++;
 						}
 					}
 
@@ -217,7 +222,7 @@ namespace ft {
 				}
 
 				void	clear(void) {
-					_root.clear();
+					//_root.clear();
 					_size = 0;
 				}
 
@@ -275,7 +280,7 @@ namespace ft {
 					return _alloc;
 				}
 
-				Tree<value_type, key_compare, allocator_type>	get_root(void){
+				Tree<value_type, key_compare, allocator_type>	get_root(void) const {
 					return _root;
 				}
 
@@ -288,8 +293,23 @@ namespace ft {
 		};
 	template <class Key, class T, class Compare, class Alloc>
 		bool	operator==(const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
-			return	lhs.get_root() == rhs.get_root();
+			if ( lhs.size() != rhs.size() )
+				return false;
+			typename map<Key, T, Compare, Alloc>::const_iterator it = lhs.begin();
+			typename map<Key, T, Compare, Alloc>::const_iterator ite = lhs.end();
+			typename map<Key, T, Compare, Alloc>::const_iterator rit = rhs.begin();
+
+			while (it != ite && rit != rhs.end()) {
+				if ( it->first != rit->first || it->second != rit->second )
+					return false;
+				it++;
+				rit++;
+			}
+			if (it != ite || rit != rhs.end())
+				return false;
+			return true;
 		}
+
 	template <class Key, class T, class Compare, class Alloc>
 		bool	operator!=(const ft::map<Key, T, Compare, Alloc>& lhs, const ft::map<Key, T, Compare, Alloc>& rhs) {
 			return	!(lhs == rhs);
