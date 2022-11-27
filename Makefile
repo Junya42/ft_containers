@@ -38,6 +38,10 @@ vector:
 					valgrind ./std_vector > output/std_output_vector 2> error/std_err_vector
 					pr -w ${COL} -m output/ft_output_vector output/std_output_vector
 
+vectortest:
+
+					${CC} ${FLAGS} ${vector} -o ${NAME}_vector -D FT
+					${CC} ${FLAGS} ${vector} -o ${STL_NAME}_vector -D STL
 stack:
 					${CC} ${FLAGS} ${stack} -o ${NAME}_stack -D FT
 					${CC} ${FLAGS} ${stack} -o ${STL_NAME}_stack -D STL
@@ -47,6 +51,9 @@ stack:
 					valgrind ./std_stack > output/std_output_stack 2> error/std_err_stack
 					pr -w ${COL} -m output/ft_output_stack output/std_output_stack
 
+stacktest:
+					${CC} ${FLAGS} ${stack} -o ${NAME}_stack -D FT
+					${CC} ${FLAGS} ${stack} -o ${STL_NAME}_stack -D STL
 map:
 					${CC} ${FLAGS} ${map} -o ${NAME}_map -D FT
 					${CC} ${FLAGS} ${map} -o ${STL_NAME}_map -D STL
@@ -56,6 +63,10 @@ map:
 					valgrind ./std_map > output/std_output_map 2> error/std_err_map
 					pr -w ${COL} -m output/ft_output_map output/std_output_map
 
+maptest:
+					${CC} ${FLAGS} ${map} -o ${NAME}_map -D FT
+					${CC} ${FLAGS} ${map} -o ${STL_NAME}_map -D STL
+
 set:
 					${CC} ${FLAGS} ${set} -o ${NAME}_set -D FT
 					${CC} ${FLAGS} ${set} -o ${STL_NAME}_set -D STL
@@ -63,10 +74,14 @@ set:
 					valgrind ./std_set > output/std_output_set 2> error/std_err_set
 					pr -w ${COL} -m output/ft_output_set output/std_output_set
 
+settest:
+					${CC} ${FLAGS} ${set} -o ${NAME}_set -D FT
+					${CC} ${FLAGS} ${set} -o ${STL_NAME}_set -D STL
+
 compile:			
 					@echo "Compiling vector, stack, map, set"
 
-test:				compile vector stack map set
+test:				compile vectortest stacktest maptest settest
 					@echo
 					@echo "Creating log file using valgrind on each containers"
 					@mkdir -p output
