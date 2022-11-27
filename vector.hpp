@@ -1,7 +1,6 @@
 #ifndef VECTOR_HPP
 # define VECTOR_HPP
 
-#include "is_integral.hpp"
 #include <functional>
 #if __x86_64__
 #define ARCH 64
@@ -12,10 +11,11 @@
 #include <iostream>
 #include <memory>
 #include <cmath>
-#include "reverse_iterator.hpp"
-#include "enable_if.hpp"
-#include "equal.hpp"
-#include "lexicographical_compare.hpp"
+#include "utils/is_integral.hpp"
+#include "utils/enable_if.hpp"
+#include "utils/equal.hpp"
+#include "utils/lexicographical_compare.hpp"
+#include "iterator/reverse_iterator.hpp"
 
 namespace ft
 {
@@ -103,19 +103,19 @@ namespace ft
             }
 
             reverse_iterator rbegin(void) {
-               return reverse_iterator(_end - 1);
+               return reverse_iterator(_end);
             }
 
             const_reverse_iterator rbegin(void) const {
-               return reverse_iterator(_end - 1);
+               return reverse_iterator(_end);
             }
 
             reverse_iterator rend(void) {
-               return reverse_iterator(_start - 1);
+               return reverse_iterator(_start);
             }
 
             const_reverse_iterator rend(void) const {
-               return reverse_iterator(_start - 1);
+               return reverse_iterator(_start);
             }
             /***** Capacity *****/
             /********************/
@@ -139,6 +139,7 @@ namespace ft
             void        reserve(size_type n) {
                if (!n) {
                   reserve(1);
+                  return ;
                }
                if (n > capacity()) {
                   pointer  start;
