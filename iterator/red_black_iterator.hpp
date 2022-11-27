@@ -122,9 +122,8 @@ namespace ft {
 							}
 						}
 						else {
-							while (_node->parent && _node->parent->right == _node) {
+							while (_node->parent && _node->parent->right == _node)
 								_node = _node->parent;
-							}
 							_node = _node->parent;
 						}
 					}
@@ -172,7 +171,7 @@ namespace ft {
 				const_Tree_iterator(const const_Tree_iterator& src)
 					: _node(src._node), _end(src._end) {
 					} 
-				
+
 				const_Tree_iterator(const Tree_iterator<Iterator>& src)
 					: _node(src.base()), _end(src.end()) {
 					} 

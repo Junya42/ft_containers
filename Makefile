@@ -3,6 +3,11 @@ stack		= ./main/stack_main.cpp
 map			= ./main/map_main.cpp
 set			= ./main/set_main.cpp
 
+vectorb		= ./benchmark_mains/vector_benchmark.cpp
+stackb		= ./benchmark_mains/stack_benchmark.cpp
+mapb		= ./benchmark_mains/map_benchmark.cpp
+setb		= ./benchmark_mains/set_benchmark.cpp
+
 RED			='\033[0;31m'
 PURPLE		='\033[0;35m'
 NC			='\033[0m'
@@ -39,9 +44,13 @@ vector:
 					pr -w ${COL} -m output/ft_output_vector output/std_output_vector
 
 vectortest:
-
 					${CC} ${FLAGS} ${vector} -o ${NAME}_vector -D FT
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME}_vector -D STL
+
+vectorbenchmark:
+					${CC} ${FLAGS} ${vectorb} -o ${NAME}_vector_benchmark -D FT
+					${CC} ${FLAGS} ${vectorb} -o ${STL_NAME}_vector_benchmark -D STL
+
 stack:
 					${CC} ${FLAGS} ${stack} -o ${NAME}_stack -D FT
 					${CC} ${FLAGS} ${stack} -o ${STL_NAME}_stack -D STL
@@ -54,6 +63,11 @@ stack:
 stacktest:
 					${CC} ${FLAGS} ${stack} -o ${NAME}_stack -D FT
 					${CC} ${FLAGS} ${stack} -o ${STL_NAME}_stack -D STL
+
+stackbenchmark:
+					${CC} ${FLAGS} ${stackb} -o ${NAME}_stack_benchmark -D FT
+					${CC} ${FLAGS} ${stackb} -o ${STL_NAME}_stack_benchmark -D STL
+
 map:
 					${CC} ${FLAGS} ${map} -o ${NAME}_map -D FT
 					${CC} ${FLAGS} ${map} -o ${STL_NAME}_map -D STL
@@ -67,6 +81,10 @@ maptest:
 					${CC} ${FLAGS} ${map} -o ${NAME}_map -D FT
 					${CC} ${FLAGS} ${map} -o ${STL_NAME}_map -D STL
 
+mapbenchmark:
+					${CC} ${FLAGS} ${mapb} -o ${NAME}_map_benchmark -D FT
+					${CC} ${FLAGS} ${mapb} -o ${STL_NAME}_map_benchmark -D STL
+
 set:
 					${CC} ${FLAGS} ${set} -o ${NAME}_set -D FT
 					${CC} ${FLAGS} ${set} -o ${STL_NAME}_set -D STL
@@ -77,6 +95,10 @@ set:
 settest:
 					${CC} ${FLAGS} ${set} -o ${NAME}_set -D FT
 					${CC} ${FLAGS} ${set} -o ${STL_NAME}_set -D STL
+
+setbenchmark:
+					${CC} ${FLAGS} ${setb} -o ${NAME}_set_benchmark -D FT
+					${CC} ${FLAGS} ${setb} -o ${STL_NAME}_set_benchmark -D STL
 
 compile:			
 					@echo "Compiling vector, stack, map, set"
@@ -124,9 +146,35 @@ test:				compile vectortest stacktest maptest settest
 					@echo "${RED}set${NC}"
 					cat error/ft_err_set
 
+benchmark:			compile vectorbenchmark stackbenchmark mapbenchmark setbenchmark
+					@echo
+					@mkdir -p benchmark
+					./ft_vector_benchmark > benchmark/ft_vec
+					./std_vector_benchmark > benchmark/std_vec
+					mv ft_vector_benchmark benchmark/
+					mv std_vector_benchmark benchmark/
+					pr -T -w ${COL} -m benchmark/ft_vec benchmark/std_vec
+					./ft_stack_benchmark > benchmark/ft_stack
+					./std_stack_benchmark > benchmark/std_stack
+					mv ft_stack_benchmark benchmark/
+					mv std_stack_benchmark benchmark/
+					pr -T -w ${COL} -m benchmark/ft_stack benchmark/std_stack
+					./ft_map_benchmark > benchmark/ft_map
+					./std_map_benchmark > benchmark/std_map
+					mv ft_map_benchmark benchmark/
+					mv std_map_benchmark benchmark/
+					pr -T -w ${COL} -m benchmark/ft_map benchmark/std_map
+					./ft_set_benchmark > benchmark/ft_set
+					./std_set_benchmark > benchmark/std_set
+					mv ft_set_benchmark benchmark/
+					mv std_set_benchmark benchmark/
+					pr -T -w ${COL} -m benchmark/ft_set benchmark/std_set
+					
+
 clean:
 					${RM} output			
 					${RM} error
+					${RM} benchmark
 
 fclean:		clean
 					${RM} ${NAME}_vector

@@ -97,7 +97,7 @@ void    test_few_things( void )
 
     std::cout << "stack1 top element  : " << stack1.top() << std::endl;
     std::cout << "stack2 top element  : " << stack2.top() << std::endl;
-
+    
     stack1.pop();
     stack2.pop();
 

@@ -253,23 +253,30 @@ namespace ft
                   difference_type n;
 
                   n = last - first;
-                  _start = _alloc.allocate(sizeof(value_type) * n);
-                  for (_end = _start; _end < _start + n; _end++) {
-                     _alloc.construct(_end, *first);
-                     first++;
+                  if (n > 0) {
+                     _start = _alloc.allocate(sizeof(value_type) * n);
+                     for (_end = _start; _end < _start + n; _end++) {
+                        _alloc.construct(_end, *first);
+                        first++;
+                     }
+                     _capacity = _end;
                   }
-                  _capacity = _end;
+                  else {
+                     _start = NULL;
+                     _end = NULL;
+                     _capacity = NULL;
+                  }
                }
 
             void     push_back(const value_type& val) {
                if (size() + 1 > capacity())
-                  reserve(capacity() * 2);
+                  reserve(size() * 2);
                _alloc.construct(_end, val);
                _end++;
             }
 
             void     pop_back(void) {
-               _alloc.destroy(_end--);
+               _alloc.destroy(--_end);
             }
 
             iterator insert(iterator position, const value_type& val) {
