@@ -120,7 +120,7 @@ namespace ft {
 				}
 
 				size_type	max_size(void) const {
-					return _alloc.max_size();
+					return _root.max_size();
 				}
 
 				/***** MODIFIERS *****/
@@ -167,6 +167,10 @@ namespace ft {
 				}
 
 				void	erase(iterator first, iterator last) {
+					if (first == _root.begin() && last == _root.end()) {
+						clear();
+						return ;
+					}
 					iterator	tmp;
 					while (first != last) {
 						tmp = first;

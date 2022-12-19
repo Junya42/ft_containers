@@ -18,43 +18,43 @@ namespace ft {
 				typedef Container	container_type;
 				typedef size_t		size_type;
 
-				explicit stack(const container_type& ctnr = container_type()) : _ctnr(ctnr) {
+				explicit stack(const container_type& ctnr = container_type()) : c(ctnr) {
 				};
 
 				bool	empty(void) const {
-					return _ctnr.empty();
+					return c.empty();
 				}
 
 				size_type	size() const {
-					return _ctnr.size();
+					return c.size();
 				}
 
 				value_type& top() {
-					return _ctnr.back();
+					return c.back();
 				}
 				const value_type& top() const {
-					return _ctnr.back();
+					return c.back();
 				}
 
 				void	push(const value_type& val) {
-					_ctnr.push_back(val);
+					c.push_back(val);
 				}
 
 				void	pop(void) {
-					_ctnr.pop_back();
+					c.pop_back();
 				}
 				friend bool	operator==(stack<T, Container> const &lhs,
 						stack<T, Container> const &rhs) {
-					return lhs._ctnr == rhs._ctnr;
+					return lhs.c == rhs.c;
 				}
 
 					friend bool	operator<(stack<T, Container> const &lhs,
 							stack<T, Container> const &rhs) {
-						return lhs._ctnr < rhs._ctnr;
+						return lhs.c < rhs.c;
 					}
 				protected:
 
-				container_type	_ctnr;
+				container_type	c;
 		};
 	template <class T, class Container>
 		bool	operator!=(const stack<T, Container>&lhs, const stack<T, Container>& rhs) {

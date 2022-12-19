@@ -54,6 +54,11 @@ namespace ft {
 					clear();
 				}
 
+
+				size_type	max_size(void) const {
+					return _alloc_node.max_size();
+				}
+
 				void	clear(void) {
 					_root = _clear_nodes(_root);
 				}
@@ -104,10 +109,18 @@ namespace ft {
 					x = position.base();
 					while (x) {
 						y = x;
-						if (_cmp(x->data.first, new_data.first))
-							x = x->right;
-						else if (_cmp(new_data.first, x->data.first))
-							x = x->left;
+						if (_cmp(x->data.first, new_data.first)) {
+							if (x->parent && x == x->parent->left &&(_cmp(x->parent->data.first, new_data.first)))
+								x = x->parent;
+							else
+								x = x->right;
+						}
+						else if (_cmp(new_data.first, x->data.first)) {
+							if (x->parent && x == x->parent->right && (_cmp(new_data.first, x->parent->data.first)))
+								x = x->parent;
+							else
+								x = x->left;
+						}
 						else
 							return ft::make_pair<iterator, bool>(iterator(x, NULL), false);
 					}
@@ -138,7 +151,7 @@ namespace ft {
 					return delete_node(ptr);
 				}
 
-				ft::pair<iterator, bool>	delete_node(Node_ptr z) {
+				ft::pair<iterator, bool>	delete_node(Node_ptr &z) {
 					Node_ptr x, y;
 					bool orignal_color;
 
@@ -157,7 +170,7 @@ namespace ft {
 						orignal_color = y->color;
 						x = y->right;
 						if(x && y->parent == z) {
-							x->parent = z;
+							x->parent = y;
 						}
 						else {
 							_transplant(y, y->right);
@@ -178,6 +191,14 @@ namespace ft {
 					if (orignal_color == BLACK)
 						_delete_fix(x);
 					return ft::make_pair<iterator, bool>(iterator(x, NULL), true);
+				}
+
+				void	erase_all(Node_ptr x, Node_ptr limit) {
+					if (!x)
+						return ;
+					(void)limit;
+					_alloc_node.destroy(x);
+					_alloc_node.deallocate(x, sizeof(Node_ptr));
 				}
 
 				iterator	find(const key_type& k) {
@@ -310,7 +331,6 @@ namespace ft {
 					_alloc_node = src._alloc_node;
 					src._alloc_node = tmp_node_alloc;
 				}
-
 
 			private:
 

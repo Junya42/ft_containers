@@ -54,6 +54,10 @@ namespace ft {
 					clear();
 				}
 
+				size_type	max_size(void) const {
+					return _alloc_node.max_size();
+				}
+
 				void	clear(void) {
 					_root = _clear_nodes(_root);
 				}
@@ -104,10 +108,18 @@ namespace ft {
 					x = position.base();
 					while (x) {
 						y = x;
-						if (_cmp(x->data, new_data))
-							x = x->right;
-						else if (_cmp(new_data, x->data))
-							x = x->left;
+						if (_cmp(x->data, new_data)) {
+							if (x->parent && x == x->parent->left && (_cmp(x->parent->data, new_data)))
+								x = x->parent;
+							else
+								x = x->right;
+						}
+						else if (_cmp(new_data, x->data)) {
+							if (x->parent && x == x->parent->right && (_cmp(new_data, x->parent->data)))
+								x = x->parent;
+							else
+								x = x->left;
+						}
 						else
 							return ft::make_pair<iterator, bool>(iterator(x, NULL), false);
 					}
@@ -138,7 +150,7 @@ namespace ft {
 					return delete_node(ptr);
 				}
 
-				ft::pair<iterator, bool>	delete_node(Node_ptr z) {
+				ft::pair<iterator, bool>	delete_node(Node_ptr &z) {
 					Node_ptr x, y;
 					bool orignal_color;
 
@@ -157,7 +169,7 @@ namespace ft {
 						orignal_color = y->color;
 						x = y->right;
 						if(x && y->parent == z) {
-							x->parent = z;
+							x->parent = y;
 						}
 						else {
 							_transplant(y, y->right);

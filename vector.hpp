@@ -2,6 +2,7 @@
 # define VECTOR_HPP
 
 #include <functional>
+#include <stdexcept>
 #if __x86_64__
 #define ARCH 64
 #else
@@ -141,6 +142,8 @@ namespace ft
                   reserve(1);
                   return ;
                }
+               if (n > max_size())
+                  throw std::length_error("vector::reserve");
                if (n > capacity()) {
                   pointer  start;
                   pointer  end;
@@ -174,10 +177,13 @@ namespace ft
 
             void        resize(size_type n, value_type val = value_type()) {
                pointer  ptr = _start + n;
+               if (n > max_size())
+                  throw std::length_error("vector::resize");
                if (n < size())
                {
                   while (ptr < _end)
                      _alloc.destroy(ptr++);
+                  _end = _start + n;
                }
                else if (n > size())
                {
@@ -200,10 +206,14 @@ namespace ft
             }
 
             reference at(size_type n) {
+               if (n >= size())
+                  throw(std::out_of_range("at"));
                return _start[n];
             }
 
             const_reference at(size_type n) const {
+               if (n >= size())
+                  throw(std::out_of_range("at"));
                return _start[n];
             }
 
@@ -229,8 +239,10 @@ namespace ft
                if (n <= capacity()) {
                   for (pointer ptr = _start; ptr < _end; ptr++) {
                      _alloc.destroy(ptr);
-                     _alloc.construct(ptr, val);
+                     if (ptr < _start + n)
+                        _alloc.construct(ptr, val);
                   }
+                  _end = _start + n;
                }
                else {
                   for (pointer ptr = _start; ptr < _end; ptr++)
@@ -252,7 +264,7 @@ namespace ft
                   }
                   difference_type n;
 
-                  n = last - first;
+                  n = std::distance(first, last);
                   if (n > 0) {
                      _start = _alloc.allocate(sizeof(value_type) * n);
                      for (_end = _start; _end < _start + n; _end++) {
@@ -297,9 +309,9 @@ namespace ft
                   tmp--;
                   new_end--;
                }
-               if (tmp < _start)
-                  tmp++;
-               _alloc.construct(tmp, val);
+               //if (tmp < _start)
+                 // tmp++;
+               _alloc.construct(new_pos, val);
                _end++;
                return new_pos;
             }
@@ -349,7 +361,7 @@ namespace ft
             template <class InputIterator>
                void  insert(iterator position, InputIterator first, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type last) {
                   difference_type   pos = position - _start;
-                  difference_type   itrange = last - first;
+                  difference_type   itrange = std::distance(first, last);
 
                   if (!itrange)
                      return ;
@@ -416,7 +428,7 @@ namespace ft
                   save++;
                   ptr++;
                }
-               _end = _end - (last - first);
+               _end = _end - std::distance(first, last);
                return first;
             }
 

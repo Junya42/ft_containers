@@ -29,11 +29,14 @@ namespace ft {
 
 				set_Tree_iterator(iterator_type node, iterator_type end)
 					: _node(node), _end(end) {
-					}
+				}
 
 				set_Tree_iterator(const set_Tree_iterator& src) : _node(src._node), _end(src._end) {
 				}
 
+				set_Tree_iterator(const const_set_Tree_iterator<Iterator> &src)
+					: _node(src.base()), _end(src.end()) {
+				}
 				set_Tree_iterator&	operator=(const set_Tree_iterator& src) {
 					_node = src._node;
 					_end = src._end;
@@ -140,7 +143,7 @@ namespace ft {
 
 			public:
 
-				typedef				const Iterator*							iterator_type;
+				typedef				Iterator*							iterator_type;
 				typedef typename	Iterator::value_type					const value_type;
 				typedef				const value_type *						pointer;
 				typedef				const value_type &						reference;

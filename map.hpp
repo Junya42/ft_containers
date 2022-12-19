@@ -1,5 +1,5 @@
 #ifndef MAP_HPP
-# define MAP_HPP
+#define MAP_HPP
 
 #include <alloca.h>
 #include <iostream>
@@ -79,10 +79,11 @@ namespace ft {
 
 				map& operator=(const map& x) {
 					if (*this != x) {
-						if (_size)
-							clear();
+						//if (_size)
+						//	clear();
 						_cmp = x._cmp;
 						_alloc = x._alloc;
+						_root.clear();
 						insert(x.begin(), x.end());
 						_size = x._size;
 					}
@@ -140,7 +141,7 @@ namespace ft {
 				}
 
 				size_type	max_size(void) const {
-					return _alloc.max_size();
+					return _root.max_size();
 				}
 
 				/***** ELEMENT ACCESS *****/
@@ -191,13 +192,19 @@ namespace ft {
 					ft::pair<iterator, bool>	tmp;
 
 					tmp = _root.get_delete_node_ptr(k);
-					if (tmp.second)
+					if (tmp.second) {
 						_size--;
+					}
 					return tmp.second;
 				}
 
 				void	erase(iterator first, iterator last) {
+					//if (first == _root.begin() && last == _root.end()) {
+				//		clear();
+				//		return ;
+				//	}
 					iterator	tmp;
+					
 					while (first != last) {
 						tmp = first;
 						first++;
@@ -226,7 +233,7 @@ namespace ft {
 				}
 
 				void	clear(void) {
-					//_root.clear();
+					_root.clear();
 					_size = 0;
 				}
 
