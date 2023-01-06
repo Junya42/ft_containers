@@ -109,13 +109,13 @@ namespace ft {
 					while (x) {
 						y = x;
 						if (_cmp(x->data, new_data)) {
-							if (x->parent && x == x->parent->left && (_cmp(x->parent->data, new_data)))
+							if (x->parent && x == x->parent->left && (!_cmp(new_data, x->parent->data)))
 								x = x->parent;
 							else
 								x = x->right;
 						}
 						else if (_cmp(new_data, x->data)) {
-							if (x->parent && x == x->parent->right && (_cmp(new_data, x->parent->data)))
+							if (x->parent && x == x->parent->right && (!_cmp(x->parent->data, new_data)))
 								x = x->parent;
 							else
 								x = x->left;

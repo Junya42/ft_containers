@@ -6,7 +6,7 @@
 /*   By: anremiki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:05:20 by anremiki          #+#    #+#             */
-/*   Updated: 2022/11/18 15:33:47 by anremiki         ###   ########.fr       */
+/*   Updated: 2022/12/28 00:29:52 by anremiki         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ template <class T, T v>
 		typedef T value_type;
 		static bool const	value = v;
 	};
+
 
 template <class T>
 	struct	is_integral: integral_constant<bool, false> {

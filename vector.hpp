@@ -237,11 +237,10 @@ namespace ft
 
             void     assign(size_type n, const value_type &val) {
                if (n <= capacity()) {
-                  for (pointer ptr = _start; ptr < _end; ptr++) {
+                  for (pointer ptr = _start; ptr < _end; ptr++)
                      _alloc.destroy(ptr);
-                     if (ptr < _start + n)
-                        _alloc.construct(ptr, val);
-                  }
+                  for (pointer ptr = _start; ptr < _start + n; ptr++)
+                     _alloc.construct(ptr, val);
                   _end = _start + n;
                }
                else {
@@ -310,7 +309,7 @@ namespace ft
                   new_end--;
                }
                //if (tmp < _start)
-                 // tmp++;
+               // tmp++;
                _alloc.construct(new_pos, val);
                _end++;
                return new_pos;
