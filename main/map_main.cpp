@@ -320,6 +320,63 @@ void    test_operator( void )
     std::cout << std::endl;
 }
 
+<<<<<<< HEAD
+=======
+void	test_at(void) {
+    std::cout << REDD << " TEST_AT " << WHITE << std::endl << std::endl;
+    
+	std::cout << YELLOW << " INSERT VALUES " << WHITE << std::endl << std::endl;
+
+	NM::map<std::string, int> Map;
+
+	Map["Alpha"] = 10;
+	Map["Beta"] = 20;
+	Map["Gamma"] = 30;
+
+	for (NM::map<std::string, int>::iterator it = Map.begin(); it != Map.end(); it++) {
+		std::cout << it-> first << " : [" << Map.at(it->first) << "]" << std::endl;
+	}
+
+	std::cout << YELLOW << "MODIFYING VALUES (+2) WITH AT" << WHITE << std::endl << std::endl;
+
+	Map.at("Alpha") = 12;
+	Map.at("Beta") = 12;
+	Map.at("Gamma") = 32;
+
+	for (NM::map<std::string, int>::iterator it = Map.begin(); it != Map.end(); it++) {
+		std::cout << it-> first << " : [" << Map.at(it->first) << "]" << std::endl;
+	}
+
+	std::cout << YELLOW << "ACCESSING 1 GOOD /  1 WRONG VALUES" << WHITE << std::endl << std::endl;
+	try {
+		std::cout << "at(\"Alpha\") : " << Map.at("Alpha") << std::endl;
+		std::cout << "at(\"Pouet\") : " << Map.at("Pouet") << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << REDD << "Out of range exception : " << WHITE << e.what() << std::endl << std::endl;
+	}
+
+	std::cout << REDD << " TEST AT CONST " << WHITE << std::endl << std::endl;
+
+	std::cout << YELLOW << " Copy Map into const Map2" << WHITE << std::endl << std::endl;
+	const NM::map<std::string, int> Map2 = Map;
+
+	std::cout << YELLOW << " PRINTING VALUES" << WHITE << std::endl << std::endl;
+	for (NM::map<std::string, int>::iterator it = Map.begin(); it != Map.end(); it++) {
+		std::cout << it-> first << " : [" << Map.at(it->first) << "]" << std::endl;
+	}
+
+	std::cout << YELLOW << "ACCESSING 1 GOOD /  1 WRONG VALUES" << WHITE << std::endl << std::endl;
+	try {
+		std::cout << "at(\"Alpha\") : " << Map.at("Alpha") << std::endl;
+		std::cout << "at(\"Pouet\") : " << Map.at("Pouet") << std::endl;
+	}
+	catch (std::exception &e) {
+		std::cout << REDD << "Out of range exception : " << WHITE << e.what() << std::endl << std::endl;
+	}
+}
+
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 void    	go_crasy( void )
 {
 
@@ -477,6 +534,10 @@ int main( void )
 	test_insert();
 	test_erase();
     test_operator();
+<<<<<<< HEAD
+=======
+	test_at();
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 	go_crasy();
     
     return 0;

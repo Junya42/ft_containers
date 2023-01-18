@@ -6,7 +6,11 @@
 /*   By: anremiki <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/18 14:05:20 by anremiki          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/11/18 15:33:47 by anremiki         ###   ########.fr       */
+=======
+/*   Updated: 2022/12/28 00:29:52 by anremiki         ###   ########.fr       */
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +25,10 @@ template <class T, T v>
 		static bool const	value = v;
 	};
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 template <class T>
 	struct	is_integral: integral_constant<bool, false> {
 	};

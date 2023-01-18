@@ -138,10 +138,17 @@ namespace ft
             }
 
             void        reserve(size_type n) {
+<<<<<<< HEAD
                if (!n) {
                   reserve(1);
                   return ;
                }
+=======
+               /*if (!n) {
+                  reserve(1);
+                  return ;
+               }*/
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                if (n > max_size())
                   throw std::length_error("vector::reserve");
                if (n > capacity()) {
@@ -188,7 +195,11 @@ namespace ft
                else if (n > size())
                {
                   if (n > capacity())
+<<<<<<< HEAD
                      reserve(n);
+=======
+                     _reserve(n);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                   while (n != size())
                      push_back(val);
                }
@@ -237,11 +248,18 @@ namespace ft
 
             void     assign(size_type n, const value_type &val) {
                if (n <= capacity()) {
+<<<<<<< HEAD
                   for (pointer ptr = _start; ptr < _end; ptr++) {
                      _alloc.destroy(ptr);
                      if (ptr < _start + n)
                         _alloc.construct(ptr, val);
                   }
+=======
+                  for (pointer ptr = _start; ptr < _end; ptr++)
+                     _alloc.destroy(ptr);
+                  for (pointer ptr = _start; ptr < _start + n; ptr++)
+                     _alloc.construct(ptr, val);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                   _end = _start + n;
                }
                else {
@@ -282,7 +300,11 @@ namespace ft
 
             void     push_back(const value_type& val) {
                if (size() + 1 > capacity())
+<<<<<<< HEAD
                   reserve(size() * 2);
+=======
+                  _reserve(size() * 2);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                _alloc.construct(_end, val);
                _end++;
             }
@@ -295,7 +317,11 @@ namespace ft
                difference_type   pos = position - _start;
 
                if (size() + 1 > capacity())
+<<<<<<< HEAD
                   reserve(size() * 2);
+=======
+                  _reserve(size() * 2);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                pointer  tmp;
                pointer  new_end;
                pointer  new_pos;
@@ -310,7 +336,11 @@ namespace ft
                   new_end--;
                }
                //if (tmp < _start)
+<<<<<<< HEAD
                  // tmp++;
+=======
+               // tmp++;
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                _alloc.construct(new_pos, val);
                _end++;
                return new_pos;
@@ -322,11 +352,19 @@ namespace ft
                difference_type   pos = position - _start;
 
                if (!capacity())
+<<<<<<< HEAD
                   reserve(n);
                else if (size() + n > capacity() * 2) 
                   reserve(capacity() + n);
                else if (size() + n > capacity())
                   reserve(size() * 2);
+=======
+                  _reserve(n);
+               else if (size() + n > capacity() * 2) 
+                  _reserve(capacity() + n);
+               else if (size() + n > capacity())
+                  _reserve(size() * 2);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 
                pointer  ptr;
                pointer  new_end;
@@ -366,11 +404,19 @@ namespace ft
                   if (!itrange)
                      return ;
                   if (!capacity())
+<<<<<<< HEAD
                      reserve(itrange);
                   else if (size() + itrange > capacity() * 2) 
                      reserve(capacity() + itrange);
                   else if (size() + itrange > capacity())
                      reserve(size() * 2);
+=======
+                     _reserve(itrange);
+                  else if (size() + itrange > capacity() * 2) 
+                     _reserve(capacity() + itrange);
+                  else if (size() + itrange > capacity())
+                     _reserve(size() * 2);
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
                   pointer  test;
                   pointer  ptr;
                   pointer  new_end;
@@ -475,6 +521,16 @@ namespace ft
             pointer        _end;
             pointer        _capacity;
             allocator_type _alloc;
+<<<<<<< HEAD
+=======
+
+            void        _reserve(size_type n) {
+               if (!n)
+                  reserve(1);
+               else
+                  reserve(n);
+            }
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
       };
 
    template <class T, class Alloc>

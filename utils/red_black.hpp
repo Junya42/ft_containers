@@ -110,13 +110,21 @@ namespace ft {
 					while (x) {
 						y = x;
 						if (_cmp(x->data.first, new_data.first)) {
+<<<<<<< HEAD
 							if (x->parent && x == x->parent->left &&(_cmp(x->parent->data.first, new_data.first)))
+=======
+							if (x->parent && x == x->parent->left && (!_cmp(new_data.first, x->parent->data.first)))
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 								x = x->parent;
 							else
 								x = x->right;
 						}
 						else if (_cmp(new_data.first, x->data.first)) {
+<<<<<<< HEAD
 							if (x->parent && x == x->parent->right && (_cmp(new_data.first, x->parent->data.first)))
+=======
+							if (x->parent && x == x->parent->right && (!_cmp(x->parent->data.first, new_data.first)))
+>>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 								x = x->parent;
 							else
 								x = x->left;
