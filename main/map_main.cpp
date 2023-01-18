@@ -320,8 +320,6 @@ void    test_operator( void )
     std::cout << std::endl;
 }
 
-<<<<<<< HEAD
-=======
 void	test_at(void) {
     std::cout << REDD << " TEST_AT " << WHITE << std::endl << std::endl;
     
@@ -376,7 +374,6 @@ void	test_at(void) {
 	}
 }
 
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 void    	go_crasy( void )
 {
 
@@ -534,10 +531,7 @@ int main( void )
 	test_insert();
 	test_erase();
     test_operator();
-<<<<<<< HEAD
-=======
 	test_at();
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 	go_crasy();
     
     return 0;

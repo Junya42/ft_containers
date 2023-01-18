@@ -150,8 +150,6 @@ namespace ft {
 					return	(*((insert(ft::make_pair(k, mapped_type()))).first)).second;
 				}
 
-<<<<<<< HEAD
-=======
 				mapped_type&	at(const key_type& x) {
 					iterator	it = find(x);
 					if (it != end())
@@ -166,7 +164,6 @@ namespace ft {
 					throw (std::out_of_range("map::at"));
 				}
 
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 				/***** MODIFIERS *****/
 
 				pair<iterator, bool>	insert(const value_type& val) {

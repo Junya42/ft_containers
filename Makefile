@@ -8,12 +8,9 @@ stackb		= ./benchmark_mains/stack_benchmark.cpp
 mapb		= ./benchmark_mains/map_benchmark.cpp
 setb		= ./benchmark_mains/set_benchmark.cpp
 
-<<<<<<< HEAD
-=======
 main		= ./main/main.cpp
 bench		= ./benchmark_mains/main.cpp
 
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 RED			='\033[0;31m'
 PURPLE		='\033[0;35m'
 NC			='\033[0m'
@@ -32,12 +29,8 @@ CC			= c++
 
 all:				$(NAME)
 
-<<<<<<< HEAD
-$(NAME):			${CC} ${FLAGS} ${vector} -o ${NAME}_vector -D FT
-=======
 $(NAME):			
 					${CC} ${FLAGS} ${vector} -o ${NAME}_vector -D FT
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME}_vector -D STL
 					@mkdir -p output
 					@mkdir -p error
@@ -54,8 +47,6 @@ vector:
 					valgrind ./std_vector > output/std_output_vector 2> error/std_err_vector
 					pr -w ${COL} -m output/ft_output_vector output/std_output_vector
 
-<<<<<<< HEAD
-=======
 defaultmain:
 					${CC} ${FLAGS} ${main} -o ${NAME}_main -D FT
 					${CC} ${FLAGS} ${main} -o ${STL_NAME}_main -D STL
@@ -76,7 +67,6 @@ defaultbench:
 					mv std_bench benchmark/
 					pr -T -w ${COL} -m benchmark/ft_42 benchmark/std_42
 
->>>>>>> 1a2bb6206fea81b9ccedd624c1df881597cf2b20
 vectortest:
 					${CC} ${FLAGS} ${vector} -o ${NAME}_vector -D FT
 					${CC} ${FLAGS} ${vector} -o ${STL_NAME}_vector -D STL
